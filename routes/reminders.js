@@ -1,40 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const reminders = require('../controllers/reminders')
 
-const reminders = []
+router.route('/')
+    .get(reminders.getReminders)
+    .post(reminders.addReminder)
 
-router.get('/', (req, res) => {
-    //fetch all reminders from database
-    res.send(reminders)
-})
-
-router.get('/:id', (req, res) => {
-    //fetch one reminder from database
-    const { id } = req.params;
-    res.send(reminders[id])
-})
-
-router.post('/', (req, res) => {
-    //add reminder to database
-    const newReminder = req.body;
-    console.log(req.body);
-    reminders.push(newReminder);
-    res.send('Added reminder');
-})
-
-router.put('/:id', (req, res) => {
-    //update reminder
-    const newReminder = req.body;
-    const { id } = req.params;
-    reminders[id] = newReminder;
-    res.send('Successfully updated')
-})
-
-router.delete('/:id', (req, res) => {
-    //delete reminder
-    const { id } = req.params;
-    reminders.splice(id, 1);
-    res.send('Successfully deleted')
-})
+router.route('/:id')
+    .get(reminders.getReminder)
+    .put(reminders.editReminder)
+    .delete(reminders.deleteReminder)
 
 module.exports = router;
