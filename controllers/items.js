@@ -1,6 +1,31 @@
 const Item = require('../models/item');
 
+module.exports.getItems = async (req, res) => {
+    const items = await Item.find({});
+    res.send(items);
+}
+
+module.exports.getItem = async (req, res) => {
+    const { id } = req.params;
+    const item = await Item.findById(id);
+    res.send(item);
+}
+
 module.exports.addItem = async (req, res) => {
     const item = new Item(req.body.item);
     await item.save()
+    res.send('Added item');
+}
+
+module.exports.editItem = async (req, res) => {
+    const { id } = req.params;
+    const newItem = req.body.item;
+    const item = await Item.findByIdAndUpdate(id, newItem, { new: true, runValidators: true });
+    res.send(item);
+}
+
+module.exports.deleteItem = async (req, res) => {
+    const { id } = req.params;
+    await Item.findByIdAndDelete(id);
+    res.redirect('/items')
 }

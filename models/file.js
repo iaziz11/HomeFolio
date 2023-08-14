@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const fileSchema = new Schema({
+const FileSchema = new Schema({
     url: String,
     dateAdded: Date,
     fileName: String,
@@ -13,4 +13,4 @@ const fileSchema = new Schema({
     }
 })
 
-module.exports = mongoose.model('File', fileSchema)
+module.exports = mongoose.model('File', FileSchema)
