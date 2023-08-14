@@ -2,7 +2,6 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-
 const createError = require('http-errors');
 const express = require('express');
 const session = require('express-session');
@@ -20,6 +19,7 @@ const usersRouter = require('./routes/users');
 const remindersRouter = require('./routes/reminders');
 const filesRouter = require('./routes/files');
 const expensesRouter = require('./routes/expenses');
+const itemsRouter = require('./routes/items');
 
 const DbUrl = process.env.DB_URL;
 const secret = process.env.SECRET;
@@ -71,6 +71,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', usersRouter);
+app.use('/items', itemsRouter)
 app.use('/reminders', remindersRouter)
 app.use('/expenses', expensesRouter)
 app.use('/files', filesRouter)

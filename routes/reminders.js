@@ -1,13 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const reminders = require('../controllers/reminders')
+const reminders = require('../controllers/reminders');
+const { isLoggedIn } = require('../utils/utils');
 
-const isLoggedIn = (req, res, next) => {
-    if (!req.isAuthenticated()) {
-        return res.redirect('/login');
-    }
-    next();
-}
 
 router.route('/')
     .get(isLoggedIn, reminders.getReminders)
