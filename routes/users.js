@@ -6,11 +6,11 @@ const users = require('../controllers/users');
 const { isLoggedIn, isNotLoggedIn } = require('../utils/utils')
 
 
-router.get('/login', (req, res) => {
+router.get('/login', isNotLoggedIn, (req, res) => {
   res.send('GET /login')
 })
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login', successRedirect: '/reminders' }));
-router.post('/register', users.registerUser)
-router.post('/logout', users.logoutUser)
+router.post('/login', isNotLoggedIn, passport.authenticate('local', { failureRedirect: '/login', successRedirect: '/reminders' }));
+router.post('/register', isNotLoggedIn, users.registerUser)
+router.post('/logout', isLoggedIn, users.logoutUser)
 
 module.exports = router;

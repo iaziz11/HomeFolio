@@ -2,14 +2,15 @@ const express = require('express');
 const router = express.Router();
 const items = require('../controllers/items');
 const { isLoggedIn } = require('../utils/utils');
+const { validateItem } = require('../middleware/validateInputs');
 
 router.route('/')
     .get(isLoggedIn, items.getItems)
-    .post(isLoggedIn, items.addItem)
+    .post(isLoggedIn, validateItem, items.addItem)
 
 router.route('/:id')
     .get(isLoggedIn, items.getItem)
-    .put(isLoggedIn, items.editItem)
+    .put(isLoggedIn, validateItem, items.editItem)
     .delete(isLoggedIn, items.deleteItem)
 
 module.exports = router;
