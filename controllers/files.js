@@ -1,7 +1,10 @@
 const File = require('../models/File');
+const Item = require('../models/item');
 
 module.exports.getFiles = async (req, res) => {
-    const files = await File.find({});
+    const { itemId } = req.params;
+    const currentItem = await Item.findById(itemId);
+    const files = await File.find({ _id: { $in: currentItem.files } });
     res.send(files);
 }
 
@@ -12,9 +15,14 @@ module.exports.getFile = async (req, res) => {
 }
 
 module.exports.addFile = async (req, res) => {
+    const { itemId } = req.params;
     const file = new File(req.body.file);
+    const currentItem = await Item.findById(itemId);
+    currentItem.files.push(file._id);
+    file.item = currentItem._id;
     await file.save()
-    res.send('Added File');
+    await currentItem.save();
+    res.redirect(`${itemId}/files`);
 }
 
 module.exports.editFile = async (req, res) => {
@@ -25,7 +33,8 @@ module.exports.editFile = async (req, res) => {
 }
 
 module.exports.deleteFile = async (req, res) => {
-    const { id } = req.params;
+    const { id, itemId } = req.params;
     await File.findByIdAndDelete(id);
-    res.redirect('/files')
+    await Item.findByIdAndUpdate(itemId, { $pull: { files: id } });
+    res.redirect(`${itemId}/files`);
 }

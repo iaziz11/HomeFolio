@@ -72,9 +72,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', usersRouter);
 app.use('/items', itemsRouter)
-app.use('/reminders', remindersRouter)
-app.use('/expenses', expensesRouter)
-app.use('/files', filesRouter)
+app.use('/:itemId/reminders', remindersRouter)
+app.use('/:itemId/expenses', expensesRouter)
+app.use('/:itemId/files', filesRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

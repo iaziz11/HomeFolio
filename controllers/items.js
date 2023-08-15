@@ -3,8 +3,7 @@ const User = require('../models/user');
 const mongoose = require('mongoose')
 
 module.exports.getItems = async (req, res) => {
-    const userObject = new mongoose.Types.ObjectId(req.user._id);
-    const items = await Item.find({ user: userObject }).populate('user');
+    const items = await Item.find({ user: req.user._id }).populate('user');
     res.send(items);
 }
 
