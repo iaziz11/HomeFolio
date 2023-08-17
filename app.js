@@ -12,7 +12,9 @@ const { initializeMongooseConnection } = require('./mongoose/initializeConnectio
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const MongoStore = require('connect-mongo');
+const mongoSanitize = require('express-mongo-sanitize');
 const User = require('./models/user.js');
+require('./models/file.js')
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -68,7 +70,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(mongoSanitize());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/', usersRouter);
 app.use('/items', itemsRouter)

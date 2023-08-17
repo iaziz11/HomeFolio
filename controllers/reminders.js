@@ -4,7 +4,7 @@ const Item = require('../models/item');
 module.exports.getReminders = async (req, res) => {
     const { itemId } = req.params;
     const currentItem = await Item.findById(itemId);
-    const reminders = await Reminders.find({ _id: { $in: currentItem.reminders } });
+    const reminders = await Reminder.find({ _id: { $in: currentItem.reminders } });
     res.send(reminders);
 }
 
@@ -16,13 +16,15 @@ module.exports.getReminder = async (req, res) => {
 
 module.exports.addReminder = async (req, res) => {
     const { itemId } = req.params;
+    console.log(itemId)
     const reminder = new Reminder(req.body.reminder);
     const currentItem = await Item.findById(itemId);
     currentItem.reminders.push(reminder._id);
     reminder.item = currentItem._id;
     await reminder.save()
     await currentItem.save();
-    res.redirect(`${itemId}/reminders`);
+    console.log(itemId)
+    res.redirect('/' + itemId + '/reminders');
 }
 
 module.exports.editReminder = async (req, res) => {
@@ -36,5 +38,5 @@ module.exports.deleteReminder = async (req, res) => {
     const { id, itemId } = req.params;
     await Reminder.findByIdAndDelete(id);
     await Item.findByIdAndUpdate(itemId, { $pull: { reminders: id } });
-    res.redirect(`${itemId}/reminders`);
+    res.redirect('/' + itemId + '/reminders');
 }

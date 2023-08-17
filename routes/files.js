@@ -3,10 +3,13 @@ const router = express.Router({ mergeParams: true });
 const files = require('../controllers/files');
 const { isLoggedIn } = require('../utils/utils');
 const { validateFile } = require('../middleware/validateInputs');
+const multer = require('multer');
+const { storage } = require('../cloudinary')
+const upload = multer({ storage })
 
 router.route('/')
     .get(isLoggedIn, files.getFiles)
-    .post(isLoggedIn, validateFile, files.addFile)
+    .post(isLoggedIn, upload.single('uploadFile'), validateFile, files.addFile)
 
 router.route('/:id')
     .get(isLoggedIn, files.getFile)

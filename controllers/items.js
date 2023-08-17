@@ -1,9 +1,7 @@
 const Item = require('../models/item');
-const User = require('../models/user');
-const mongoose = require('mongoose')
 
 module.exports.getItems = async (req, res) => {
-    const items = await Item.find({ user: req.user._id }).populate('user');
+    const items = await Item.find({ user: req.user._id }).populate('user').populate('files');
     res.send(items);
 }
 
@@ -17,7 +15,7 @@ module.exports.addItem = async (req, res) => {
     const item = new Item(req.body.item);
     item.user = req.user._id;
     await item.save();
-    res.send('Added item');
+    res.redirect('/items');
 }
 
 module.exports.editItem = async (req, res) => {
