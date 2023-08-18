@@ -6,7 +6,6 @@ const FileSchema = new Schema({
     dateAdded: Date,
     fileName: String,
     description: String,
-    expense: String,
     item: {
         type: Schema.Types.ObjectId,
         ref: 'Item'

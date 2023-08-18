@@ -33,7 +33,9 @@ ItemSchema.post('findOneAndDelete', async (data) => {
         }
         if (data.files.length) {
             for (let file of data.files) {
-                await cloudinary.uploader.destroy(file.fileName);
+                const foundFile = await File.findById(file);
+                console.log(foundFile)
+                await cloudinary.uploader.destroy(foundFile.fileName);
             }
             await File.deleteMany({ _id: { $in: data.files } })
         }

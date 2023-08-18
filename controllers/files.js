@@ -1,5 +1,6 @@
 const File = require('../models/file');
 const Item = require('../models/item');
+const Expense = require('../models/expense');
 const axios = require('axios')
 const FormData = require('form-data');
 
@@ -43,16 +44,21 @@ module.exports.getFile = async (req, res) => {
 
 module.exports.addFile = async (req, res) => {
     const { itemId } = req.params;
-    const file = new File(req.body.file);
-    file.url = req.file.path;
-    file.fileName = req.file.filename;
-    file.dateAdded = Date.now();
-    const tempUrl = 'https://i.pinimg.com/550x/5d/02/c9/5d02c94582f07a3b07e60647723eadc3.jpg'
-    //const mindeeResponse = await uploadImageMindee(tempUrl);
     const currentItem = await Item.findById(itemId);
-    currentItem.files.push(file._id);
-    file.item = currentItem._id;
-    await file.save()
+    const newFile = new File(req.body.file);
+    newFile.url = req.file.path;
+    newFile.fileName = req.file.filename;
+    newFile.dateAdded = Date.now();
+    currentItem.files.push(newFile._id);
+    newFile.item = itemId;
+    await newFile.save()
+    if (req.body.isExpense === 'true') {
+        const tempUrl = 'https://i.pinimg.com/550x/5d/02/c9/5d02c94582f07a3b07e60647723eadc3.jpg'
+        const mindeeResponse = await uploadImageMindee(tempUrl);
+        const newExpense = new Expense({ value: mindeeResponse.total_amount.value, item: itemId, file: newFile._id })
+        currentItem.expenses.push(newExpense);
+        await newExpense.save();
+    }
     await currentItem.save();
     res.redirect('/items');
 }

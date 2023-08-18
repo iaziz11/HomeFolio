@@ -12,6 +12,7 @@ module.exports.getItem = async (req, res) => {
 }
 
 module.exports.addItem = async (req, res) => {
+    console.log(req.body.item)
     const item = new Item(req.body.item);
     item.user = req.user._id;
     await item.save();

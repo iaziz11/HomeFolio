@@ -14,7 +14,7 @@ const LocalStrategy = require('passport-local');
 const MongoStore = require('connect-mongo');
 const mongoSanitize = require('express-mongo-sanitize');
 const User = require('./models/user.js');
-require('./models/file.js')
+const nodemailer = require("nodemailer");
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -76,9 +76,39 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', usersRouter);
 app.use('/items', itemsRouter)
-app.use('/:itemId/reminders', remindersRouter)
-app.use('/:itemId/expenses', expensesRouter)
-app.use('/:itemId/files', filesRouter)
+app.use('/items/:itemId/reminders', remindersRouter)
+app.use('/items/:itemId/expenses', expensesRouter)
+app.use('/items/:itemId/files', filesRouter)
+app.get('/email', async (req, res) => {
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+      user: 'yourhomemanagerapp@gmail.com',
+      pass: 'wrovgsiasxjbkdan'
+    }
+  });
+  // send mail with defined transport object
+  const info = await transporter.sendMail({
+    from: '"Home Manager" <foo@example.com>', // sender address
+    to: "imrannoah11@gmail.com", // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Hello world?", // plain text body
+    html: "<b>Hello world?</b>", // html body
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  //
+  // NOTE: You can go to https://forwardemail.net/my-account/emails to see your email delivery status and preview
+  //       Or you can use the "preview-email" npm package to preview emails locally in browsers and iOS Simulator
+  //       <https://github.com/forwardemail/preview-email>
+  //
+  res.send('message sent')
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
