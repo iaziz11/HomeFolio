@@ -53,8 +53,7 @@ module.exports.addFile = async (req, res) => {
     newFile.item = itemId;
     await newFile.save()
     if (req.body.isExpense === 'true') {
-        const tempUrl = 'https://i.pinimg.com/550x/5d/02/c9/5d02c94582f07a3b07e60647723eadc3.jpg'
-        const mindeeResponse = await uploadImageMindee(tempUrl);
+        const mindeeResponse = await uploadImageMindee(req.file.path);
         const newExpense = new Expense({ value: mindeeResponse.total_amount.value, item: itemId, file: newFile._id })
         currentItem.expenses.push(newExpense);
         await newExpense.save();

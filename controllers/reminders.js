@@ -16,7 +16,6 @@ module.exports.getReminder = async (req, res) => {
 
 module.exports.addReminder = async (req, res) => {
     const { itemId } = req.params;
-    console.log(itemId)
     const reminder = new Reminder(req.body.reminder);
     const currentItem = await Item.findById(itemId);
     currentItem.reminders.push(reminder._id);

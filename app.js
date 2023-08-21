@@ -15,6 +15,7 @@ const MongoStore = require('connect-mongo');
 const mongoSanitize = require('express-mongo-sanitize');
 const User = require('./models/user.js');
 const nodemailer = require("nodemailer");
+require('./scheduler');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
