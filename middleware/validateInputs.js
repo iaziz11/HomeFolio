@@ -12,6 +12,7 @@ module.exports.validateItem = (req, res, next) => {
 }
 
 module.exports.validateReminder = (req, res, next) => {
+    console.log(req.body)
     const { error } = reminderSchema.validate(req.body)
     if (error) {
         const msg = error.details.map(e => e.message).join(',')

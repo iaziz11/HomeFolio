@@ -8,14 +8,22 @@
 </head>
 
 <body>
-  <form action='/items/64de908ad68cd778bf808e9b/files' method="post" enctype="multipart/form-data">
-    <input type="file" id="uploadFile" name="uploadFile">
-    <label for="description">Description</label>
-    <input type="text" id="description" name="file[description]">
-    <label for="isExpense">Is this an expense?</label>
-    <select name="isExpense" id="isExpense">
-      <option value="true" selected>Expense</option>
-      <option value="false">File</option>
+  <form action='/items/64de908ad68cd778bf808e9b/reminders' method="post">
+    <label for="body">Text</label>
+    <input type="text" id="body" name="reminder[text]">
+    <label for="nextDate">Start Date</label>
+    <input type="datetime-local" id="nextDate" name="reminder[nextDate]">
+    <label for="recurring">Is recurring?</label>
+    <select name="reminder[recurring]" id="recurring">
+      <option value="true" selected>Yes</option>
+      <option value="false">No</option>
+    </select>
+    <label for="every">Every?</label>
+    <select name="reminder[every]" id="every">
+      <option value="0 0 0 0 0 1" selected>Minute</option>
+      <option value="0 0 0 0 0 5">5 Minutes</option>
+      <option value="0 0 0 0 0 10">10 Minutes</option>
+      <option value="0 0 0 0 1 0">Hour</option>
     </select>
     <button>Submit</button>
   </form>

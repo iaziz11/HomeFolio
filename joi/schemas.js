@@ -35,7 +35,7 @@ module.exports.reminderSchema = Joi.object({
         text: Joi.string().required().escapeHTML(),
         nextDate: Joi.string().required().escapeHTML(),
         recurring: Joi.boolean().required(),
-        every: Joi.array()
+        every: Joi.string().escapeHTML()
     }).required()
 })
 
@@ -52,3 +52,22 @@ module.exports.expenseSchema = Joi.object({
         value: Joi.string().required().escapeHTML()
     }).required()
 })
+
+{/* <label for="body">Text</label>
+    <input type="text" id="body" name="reminder[text]">
+    <label for="nextDate">Start Date</label>
+    <input type="datetime-local" id="nextDate" name="reminder[nextDate]">
+    <label for="recurring">Is recurring?</label>
+    <select name="reminder[recurring]" id="recurring">
+      <option value="true" selected>Yes</option>
+      <option value="false">No</option>
+    </select>
+    <label for="every">Every?</label>
+    <select name="reminder[every]" id="every">
+      <option value="[0 0 0 0 0 1]" selected>Minute</option>
+      <option value="[0 0 0 0 0 5]">5 Minutes</option>
+      <option value="[0 0 0 0 0 10]">10 Minutes</option>
+      <option value="[0 0 0 0 1 0]">Hour</option>
+    </select>
+    <button>Submit</button>
+  </form> */}

@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/login', (req, res) => {
-  res.render('login')
+  res.render('users/login')
 })
 router.post('/login', isNotLoggedIn, passport.authenticate('local', { failureRedirect: '/login', successRedirect: '/items' }));
 router.post('/register', isNotLoggedIn, users.registerUser)

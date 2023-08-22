@@ -9,7 +9,7 @@ module.exports.registerUser = async (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            res.redirect('/reminders');
+            res.redirect('/items');
         })
     } catch (e) {
         res.send(e);

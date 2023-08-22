@@ -11,6 +11,8 @@ const logger = require('morgan');
 const { initializeMongooseConnection } = require('./mongoose/initializeConnection.js');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const flash = require('connect-flash');
+const ejsMate = require('ejs-mate');
 const MongoStore = require('connect-mongo');
 const mongoSanitize = require('express-mongo-sanitize');
 const User = require('./models/user.js');
@@ -55,10 +57,12 @@ const sessionConfig = {
   }
 }
 app.use(session(sessionConfig));
+app.use(flash());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.engine('ejs', ejsMate)
 
 // authentication
 app.use(passport.initialize());
@@ -67,6 +71,15 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// locals
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+})
+
+// middleware
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -74,42 +87,13 @@ app.use(cookieParser());
 app.use(mongoSanitize());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+// routes
 app.use('/', usersRouter);
 app.use('/items', itemsRouter)
 app.use('/items/:itemId/reminders', remindersRouter)
 app.use('/items/:itemId/expenses', expensesRouter)
 app.use('/items/:itemId/files', filesRouter)
-app.get('/email', async (req, res) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-      user: 'yourhomemanagerapp@gmail.com',
-      pass: 'wrovgsiasxjbkdan'
-    }
-  });
-  // send mail with defined transport object
-  const info = await transporter.sendMail({
-    from: '"Home Manager" <foo@example.com>', // sender address
-    to: "imrannoah11@gmail.com", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
-  });
 
-  console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-  //
-  // NOTE: You can go to https://forwardemail.net/my-account/emails to see your email delivery status and preview
-  //       Or you can use the "preview-email" npm package to preview emails locally in browsers and iOS Simulator
-  //       <https://github.com/forwardemail/preview-email>
-  //
-  res.send('message sent')
-})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -11,6 +11,10 @@ const ReminderSchema = new Schema({
     item: {
         type: Schema.Types.ObjectId,
         ref: 'Item'
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
 })
 

@@ -16,14 +16,17 @@ module.exports.getReminder = async (req, res) => {
 
 module.exports.addReminder = async (req, res) => {
     const { itemId } = req.params;
+    req.body.reminder.every = req.body.reminder.every.split(" ");
     const reminder = new Reminder(req.body.reminder);
+    reminder.user = req.user._id;
+    reminder.sent = false;
     const currentItem = await Item.findById(itemId);
     currentItem.reminders.push(reminder._id);
     reminder.item = currentItem._id;
     await reminder.save()
     await currentItem.save();
     console.log(itemId)
-    res.redirect('/' + itemId + '/reminders');
+    res.redirect('/items');
 }
 
 module.exports.editReminder = async (req, res) => {
@@ -37,5 +40,5 @@ module.exports.deleteReminder = async (req, res) => {
     const { id, itemId } = req.params;
     await Reminder.findByIdAndDelete(id);
     await Item.findByIdAndUpdate(itemId, { $pull: { reminders: id } });
-    res.redirect('/' + itemId + '/reminders');
+    res.redirect('/items');
 }
