@@ -33,7 +33,7 @@ module.exports.getFiles = async (req, res) => {
     const { itemId } = req.params;
     const currentItem = await Item.findById(itemId);
     const files = await File.find({ _id: { $in: currentItem.files } });
-    res.send(files);
+    res.render('items/files', { files });
 }
 
 module.exports.getFile = async (req, res) => {
@@ -54,7 +54,7 @@ module.exports.addFile = async (req, res) => {
     await newFile.save()
     if (req.body.isExpense === 'true') {
         const mindeeResponse = await uploadImageMindee(req.file.path);
-        const newExpense = new Expense({ value: mindeeResponse.total_amount.value, item: itemId, file: newFile._id })
+        const newExpense = new Expense({ value: mindeeResponse.total_amount.value, item: itemId, file: newFile._id, name: req.body.file.description, date: Date.now() })
         currentItem.expenses.push(newExpense);
         await newExpense.save();
     }

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const expenses = require('../controllers/expenses');
-const { isLoggedIn } = require('../utils/utils');
-const { validateExpense } = require('../middleware/validateInputs');
+const { isLoggedIn } = require('../utils');
+const { validateExpense } = require('../middleware');
 
 router.route('/')
     .get(isLoggedIn, expenses.getExpenses)

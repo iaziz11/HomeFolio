@@ -1,1 +1,21 @@
 <% layout('layouts/boilerplate') %>
+
+    <div class="container-fluid">
+        <div class="row text-center">
+            <h1>Files</h1>
+        </div>
+        <div class="row pb-2 pt-4 px-2 text-center" id="item-container">
+            <% for (let f of files) {%>
+                <div class="col-lg-3 col-md-4 col-sm-6 item-tile mb-3 py-0">
+                    <% if (f.url.endsWith('pdf')) {%>
+                        <img class="item-icon" src="https://freesvg.org/img/pdf17.png" alt="pdf">
+                        <% } else { %>
+                            <img class="item-icon" src="<%= f.url %>" alt="icon">
+                            <% } %>
+                                <p>
+                                    <%= f.description %>
+                                </p>
+                </div>
+                <% } %>
+        </div>
+    </div>

@@ -5,7 +5,7 @@ module.exports.getReminders = async (req, res) => {
     const { itemId } = req.params;
     const currentItem = await Item.findById(itemId);
     const reminders = await Reminder.find({ _id: { $in: currentItem.reminders } });
-    res.send(reminders);
+    res.render('items/reminders', { reminders });
 }
 
 module.exports.getReminder = async (req, res) => {
@@ -20,12 +20,12 @@ module.exports.addReminder = async (req, res) => {
     const reminder = new Reminder(req.body.reminder);
     reminder.user = req.user._id;
     reminder.sent = false;
+    reminder.completed = false;
     const currentItem = await Item.findById(itemId);
     currentItem.reminders.push(reminder._id);
     reminder.item = currentItem._id;
     await reminder.save()
     await currentItem.save();
-    console.log(itemId)
     res.redirect('/items');
 }
 

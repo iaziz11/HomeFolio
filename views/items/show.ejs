@@ -1,1 +1,17 @@
 <% layout('layouts/boilerplate') %>
+
+    <div class="container-fluid">
+        <div class="row text-center">
+            <h1>Items</h1>
+        </div>
+        <div class="row pb-2 pt-4 px-2 text-center" id="item-container">
+            <% for (let i of items) {%>
+                <div class="col-lg-3 col-md-4 col-sm-6 item-tile mb-3 py-0">
+                    <img class="item-icon" src="<%= i.icon %>" alt="icon">
+                    <p>
+                        <%= i.name %>
+                    </p>
+                </div>
+                <% } %>
+        </div>
+    </div>

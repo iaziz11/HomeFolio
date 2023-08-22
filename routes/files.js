@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const files = require('../controllers/files');
-const { isLoggedIn } = require('../utils/utils');
-const { validateFile } = require('../middleware/validateInputs');
+const { isLoggedIn } = require('../utils');
+const { validateFile } = require('../middleware');
 const multer = require('multer');
 const { storage } = require('../cloudinary')
 const upload = multer({ storage })

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const reminders = require('../controllers/reminders');
-const { isLoggedIn } = require('../utils/utils');
-const { validateReminder } = require('../middleware/validateInputs');
+const { isLoggedIn } = require('../utils');
+const { validateReminder } = require('../middleware');
 
 
 router.route('/')

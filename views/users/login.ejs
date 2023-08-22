@@ -1,1 +1,33 @@
 <% layout('layouts/boilerplate') %>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6 py-3" id="login-container">
+                <div class="row mb-3">
+                    <div class="col text-center">
+                        <h1>Login</h1>
+                    </div>
+                </div>
+                <div class="row px-4">
+                    <div class="col">
+                        <form action="/login" method="post">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                                <div id="emailHelp" class="form-text">Help</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password">
+                            </div>
+                            <div class="row">
+                                <div class="col text-center">
+                                    <button type="submit" class="btn btn-primary">Login</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

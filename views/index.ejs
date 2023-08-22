@@ -8,22 +8,13 @@
 </head>
 
 <body>
-  <form action='/items/64de908ad68cd778bf808e9b/reminders' method="post">
+  <form action='/items/64e4d9006bcd7b133fb6f8ae/files' method="post" enctype="multipart/form-data">
     <label for="body">Text</label>
-    <input type="text" id="body" name="reminder[text]">
-    <label for="nextDate">Start Date</label>
-    <input type="datetime-local" id="nextDate" name="reminder[nextDate]">
-    <label for="recurring">Is recurring?</label>
-    <select name="reminder[recurring]" id="recurring">
+    <input type="text" id="body" name="file[description]">
+    <input type="file" name="uploadFile">
+    <select name="isExpense" id="isExpense">
       <option value="true" selected>Yes</option>
       <option value="false">No</option>
-    </select>
-    <label for="every">Every?</label>
-    <select name="reminder[every]" id="every">
-      <option value="0 0 0 0 0 1" selected>Minute</option>
-      <option value="0 0 0 0 0 5">5 Minutes</option>
-      <option value="0 0 0 0 0 10">10 Minutes</option>
-      <option value="0 0 0 0 1 0">Hour</option>
     </select>
     <button>Submit</button>
   </form>

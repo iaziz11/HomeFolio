@@ -1,1 +1,48 @@
 <% layout('layouts/boilerplate') %>
+
+    <div class="container">
+        <div class="row text-center">
+            <h1>Expenses</h1>
+        </div>
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">File</th>
+                            <th scope="col">Expense</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let e of expenses) {%>
+                            <tr>
+                                <td>
+                                    <%= e.name %>
+                                </td>
+                                <td>
+                                    <%= e.date %>
+                                </td>
+                                <td>
+                                    <% if (e.file) {%>
+                                        <a href="<%= e.file.url %>" target="_blank">View File</a>
+                                        <% } %>
+                                </td>
+                                <td>
+                                    $<%= e.value %>
+                                </td>
+                            </tr>
+                            <% } %>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <td colspan="2"></td>
+                            <td>$21,000</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>

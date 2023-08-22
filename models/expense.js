@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ExpenseSchema = new Schema({
-    value: String,
+    name: String,
+    date: Date,
+    value: Number,
     file: {
         type: Schema.Types.ObjectId,
         ref: 'File'

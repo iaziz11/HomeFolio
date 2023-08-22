@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const items = require('../controllers/items');
-const { isLoggedIn } = require('../utils/utils');
-const { validateItem } = require('../middleware/validateInputs');
+const { isLoggedIn } = require('../utils');
+const { validateItem } = require('../middleware');
 
 router.route('/')
     .get(isLoggedIn, items.getItems)

@@ -4,8 +4,9 @@ const Item = require('../models/item');
 module.exports.getExpenses = async (req, res) => {
     const { itemId } = req.params;
     const currentItem = await Item.findById(itemId);
-    const expenses = await Expense.find({ _id: { $in: currentItem.expenses } });
-    res.send(expenses);
+    const expenses = await Expense.find({ _id: { $in: currentItem.expenses } }).populate('file');
+    const total = expenses.reduce()
+    res.render('items/expenses', { expenses, total });
 }
 
 module.exports.getExpense = async (req, res) => {

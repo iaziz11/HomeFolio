@@ -26,7 +26,7 @@ const Joi = BaseJoi.extend(extension);
 module.exports.itemSchema = Joi.object({
     item: Joi.object({
         name: Joi.string().required().escapeHTML(),
-        icon: Joi.string().required().escapeHTML()
+        icon: Joi.string().required()
     }).required()
 })
 
@@ -49,25 +49,14 @@ module.exports.fileSchema = Joi.object({
 
 module.exports.expenseSchema = Joi.object({
     expense: Joi.object({
-        value: Joi.string().required().escapeHTML()
+        value: Joi.string().required().escapeHTML(),
+        date: Joi.string().required().escapeHTML(),
+        name: Joi.string().required().escapeHTML()
     }).required()
 })
 
-{/* <label for="body">Text</label>
-    <input type="text" id="body" name="reminder[text]">
-    <label for="nextDate">Start Date</label>
-    <input type="datetime-local" id="nextDate" name="reminder[nextDate]">
-    <label for="recurring">Is recurring?</label>
-    <select name="reminder[recurring]" id="recurring">
-      <option value="true" selected>Yes</option>
-      <option value="false">No</option>
-    </select>
-    <label for="every">Every?</label>
-    <select name="reminder[every]" id="every">
-      <option value="[0 0 0 0 0 1]" selected>Minute</option>
-      <option value="[0 0 0 0 0 5]">5 Minutes</option>
-      <option value="[0 0 0 0 0 10]">10 Minutes</option>
-      <option value="[0 0 0 0 1 0]">Hour</option>
-    </select>
-    <button>Submit</button>
-  </form> */}
+module.exports.userSchema = Joi.object({
+    fullName: Joi.string().required().escapeHTML(),
+    username: Joi.string().required().escapeHTML(),
+    password: Joi.string().required().escapeHTML()
+})
