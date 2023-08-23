@@ -4,6 +4,7 @@ const { itemSchema, reminderSchema, expenseSchema, fileSchema, userSchema } = re
 module.exports.validateItem = (req, res, next) => {
     const { error } = itemSchema.validate(req.body)
     if (error) {
+        console.error(error)
         const msg = error.details.map(e => e.message).join(',')
         next(createError(msg));
     } else {

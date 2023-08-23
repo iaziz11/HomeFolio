@@ -13,22 +13,31 @@ module.exports.getItem = async (req, res) => {
 }
 
 module.exports.addItem = async (req, res) => {
-    console.log(req.body.item)
     const item = new Item(req.body.item);
     item.user = req.user._id;
+    if (req.file) {
+        item.icon = req.file.path;
+    }
     await item.save();
-    res.redirect('/items');
+    req.flash('success', 'Successfully added item!')
+    res.send('Added item');
 }
 
 module.exports.editItem = async (req, res) => {
     const { id } = req.params;
     const newItem = req.body.item;
+    if (req.file) {
+        newItem.icon = req.file.path;
+    }
+    console.log(newItem)
     const item = await Item.findByIdAndUpdate(id, newItem, { new: true, runValidators: true });
-    res.send(item);
+    req.flash('success', 'Successfully edited item!')
+    res.send('Edited');
 }
 
 module.exports.deleteItem = async (req, res) => {
     const { id } = req.params;
     await Item.findByIdAndDelete(id);
-    res.redirect('/items')
+    req.flash('success', 'Successfully deleted item!')
+    res.send('Deleted')
 }

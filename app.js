@@ -12,6 +12,7 @@ const { initializeMongooseConnection } = require('./mongoose/initializeConnectio
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const flash = require('connect-flash');
+const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate');
 const MongoStore = require('connect-mongo');
 const mongoSanitize = require('express-mongo-sanitize');
@@ -84,6 +85,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(methodOverride('_method'));
 app.use(mongoSanitize());
 app.use(express.static(path.join(__dirname, 'public')));
 

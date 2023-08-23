@@ -5,13 +5,79 @@
             <h1>Items</h1>
         </div>
         <div class="row pb-2 pt-4 px-2 text-center" id="item-container">
+            <div class="col-lg-3 col-md-4 col-sm-6 item-tile mb-3 py-0">
+                <button data-bs-toggle="modal" data-bs-target="#newModal" id="newItemButton">
+                    <img class="item-icon"
+                        src="https://cdn.iconscout.com/icon/free/png-256/free-add-new-1439785-1214356.png?f=webp"
+                        alt="icon">
+                </button>
+                <div class="mb-1">
+                    <span>
+                        Add New Item
+                    </span>
+                </div>
+            </div>
             <% for (let i of items) {%>
                 <div class="col-lg-3 col-md-4 col-sm-6 item-tile mb-3 py-0">
-                    <img class="item-icon" src="<%= i.icon %>" alt="icon">
-                    <p>
-                        <%= i.name %>
-                    </p>
+                    <a href="items/<%= i._id %>/reminders">
+                        <img class="item-icon" src="<%= i.icon %>" alt="icon">
+                        <div class="mb-1">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                                data-bs-id="<%= i._id %>"><i class="bi bi-pencil-square"></i></button>
+                            <span>
+                                <%= i.name %>
+                            </span>
+                            <button class="btn btn-danger delete-button" id="<%= i._id %>"><i
+                                    class="bi bi-trash-fill"></i></button>
+                        </div>
+                    </a>
                 </div>
                 <% } %>
         </div>
     </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editModalLabel">Edit Item</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalEditForm" enctype="multipart/form-data">
+                        <input type="file" name="uploadFile">
+                        <input type="text" value="" name="item[name]">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-edit-form" id="">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Modal -->
+    <div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="newModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="newModalLabel">New Item</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalNewForm" enctype="multipart/form-data">
+                        <input type="file" name="uploadFile">
+                        <input type="text" value="" name="item[name]">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-new-form" id="">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/javascripts/itemsIndex.js"></script>

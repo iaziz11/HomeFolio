@@ -16,16 +16,12 @@
     border: 2px solid white;
     display: flex;
     flex-direction: row;
-    height: 60vh;
+    max-height: 60vh;
     overflow-y: auto;
 }
 
 .item-tile {
     border-radius: 1rem;
-}
-
-.item-tile p {
-    margin-bottom: 0;
 }
 
 .item-tile:hover {
@@ -34,8 +30,9 @@
 }
 
 .item-icon {
-    width: 100%;
+    width: auto;
     height: 300px;
+    margin-bottom: 0.5rem;
 }
 
 /* width */
@@ -57,4 +54,13 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #757575;
+}
+
+#newItemButton {
+    border: none;
+}
+
+a {
+    text-decoration: inherit;
+    color: inherit;
 }

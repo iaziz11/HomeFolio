@@ -25,9 +25,9 @@ const Joi = BaseJoi.extend(extension);
 
 module.exports.itemSchema = Joi.object({
     item: Joi.object({
-        name: Joi.string().required().escapeHTML(),
-        icon: Joi.string().required()
-    }).required()
+        name: Joi.string().required().escapeHTML()
+    }).required(),
+    uploadFile: Joi.string().escapeHTML(),
 })
 
 module.exports.reminderSchema = Joi.object({
