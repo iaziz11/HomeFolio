@@ -13,6 +13,7 @@
                             <th scope="col">Recurring</th>
                             <th scope="col">Next Reminder</th>
                             <th scope="col">Completed</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,13 +29,95 @@
                                     <%= r.nextDate %>
                                 </td>
                                 <td>
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                        <%=r.completed ? "checked" : "null" %>>
+                                    <input class="form-check-input" type="checkbox" data-itemid="<%= itemId %>"
+                                        data-id="<%= r._id %>" name="reminder[completed]" <%=r.completed ? "checked"
+                                        : "null" %>>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#editModal" data-bs-id="<%= r._id %>"
+                                        data-bs-itemid="<%= itemId %>"><i class="bi bi-pencil-square"></i></button>
+                                    <button class="btn btn-danger btn-sm delete-button" data-id="<%= r._id %>"
+                                        data-itemid="<%= itemId %>"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             </tr>
                             <% } %>
                     </tbody>
                 </table>
+                <div class="mb-3">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newModal">+ Add New
+                        Reminder</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- New Modal -->
+    <div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="newModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="newModalLabel">New Item</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalNewForm">
+                        <label for="text">Reminder Name:</label>
+                        <input type="text" name="reminder[text]" id="text">
+                        <label for="recurring">Is this a recurring reminder?</label>
+                        <input type="checkbox" name="reminder[recurring]" id="recurring">
+                        <label for="every">Remind Every:</label>
+                        <select name="reminder[every]" id="every">
+                            <option value="0 0 0 1 0 0" selected>Day</option>
+                            <option value="0 0 1 0 0 0">7 Days</option>
+                            <option value="0 1 0 0 0 0">30 Days</option>
+                            <option value="1 0 0 0 0 0">365 Days</option>
+                        </select>
+                        <label for="nextDate">Starting:</label>
+                        <input type="datetime-local" name="reminder[nextDate]" id="nextDate">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-new-form" id="<%=itemId %>">Save
+                        changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editModalLabel">Edit Item</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalEditForm">
+                        <label for="text">Reminder Name:</label>
+                        <input type="text" name="reminder[text]" id="text">
+                        <label for="recurring">Is this a recurring reminder?</label>
+                        <input type="checkbox" name="reminder[recurring]" id="recurring">
+                        <label for="every">Remind Every:</label>
+                        <select name="reminder[every]" id="every">
+                            <option value="0 0 0 1 0 0">Day</option>
+                            <option value="0 0 1 0 0 0">7 Days</option>
+                            <option value="0 1 0 0 0 0">30 Days</option>
+                            <option value="1 0 0 0 0 0">365 Days</option>
+                        </select>
+                        <label for="nextDate">Starting:</label>
+                        <input type="datetime-local" name="reminder[nextDate]" id="nextDate">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-edit-form" data-itemid="" data-id="">Save
+                        changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/javascripts/reminders.js"></script>

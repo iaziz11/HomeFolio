@@ -11,7 +11,11 @@ router.route('/')
 
 router.route('/:id')
     .get(isLoggedIn, reminders.getReminder)
-    .put(isLoggedIn, validateReminder, reminders.editReminder)
+    .put(isLoggedIn, reminders.editReminder)
     .delete(isLoggedIn, reminders.deleteReminder)
+
+router.route('/:id/toggleCompleted')
+    .put(isLoggedIn, reminders.toggleCompleted)
+
 
 module.exports = router;

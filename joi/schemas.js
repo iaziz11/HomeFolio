@@ -34,7 +34,7 @@ module.exports.reminderSchema = Joi.object({
     reminder: Joi.object({
         text: Joi.string().required().escapeHTML(),
         nextDate: Joi.string().required().escapeHTML(),
-        recurring: Joi.boolean().required(),
+        recurring: Joi.string(),
         every: Joi.string().escapeHTML()
     }).required()
 })

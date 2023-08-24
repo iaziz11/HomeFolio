@@ -5,7 +5,7 @@ module.exports.getReminders = async (req, res) => {
     const { itemId } = req.params;
     const currentItem = await Item.findById(itemId);
     const reminders = await Reminder.find({ _id: { $in: currentItem.reminders } });
-    res.render('items/reminders', { reminders });
+    res.render('items/reminders', { reminders, itemId });
 }
 
 module.exports.getReminder = async (req, res) => {
@@ -17,28 +17,49 @@ module.exports.getReminder = async (req, res) => {
 module.exports.addReminder = async (req, res) => {
     const { itemId } = req.params;
     req.body.reminder.every = req.body.reminder.every.split(" ");
-    const reminder = new Reminder(req.body.reminder);
-    reminder.user = req.user._id;
-    reminder.sent = false;
-    reminder.completed = false;
+    const newReminder = new Reminder(req.body.reminder);
+    if (newReminder.recurring && newReminder.recurring === 'on') {
+        newReminder.recurring = true;
+    } else {
+        newReminder.recurring = false;
+    }
+    newReminder.user = req.user._id;
+    newReminder.sent = false;
+    newReminder.completed = false;
     const currentItem = await Item.findById(itemId);
-    currentItem.reminders.push(reminder._id);
-    reminder.item = currentItem._id;
-    await reminder.save()
+    currentItem.reminders.push(newReminder._id);
+    newReminder.item = currentItem._id;
+    await newReminder.save()
     await currentItem.save();
-    res.redirect('/items');
+    req.flash('success', 'Successfully Added Reminder')
+    res.send('Added reminder');
 }
 
 module.exports.editReminder = async (req, res) => {
     const { id } = req.params;
     const newReminder = req.body.reminder;
+    if (newReminder.recurring && newReminder.recurring === 'on') {
+        newReminder.recurring = true;
+    } else {
+        newReminder.recurring = false;
+    }
+    newReminder.every ? newReminder.every = newReminder.every.split(" ") : null;
     const reminder = await Reminder.findByIdAndUpdate(id, newReminder, { new: true, runValidators: true });
+    req.flash('success', 'Successfully Edited Reminder')
     res.send(reminder);
+}
+
+module.exports.toggleCompleted = async (req, res) => {
+    const { id } = req.params;
+    const oldReminder = await Reminder.findById(id);
+    await Reminder.findByIdAndUpdate(id, { completed: !oldReminder.completed }, { new: true, runValidators: true });
+    res.send('Changed');
 }
 
 module.exports.deleteReminder = async (req, res) => {
     const { id, itemId } = req.params;
     await Reminder.findByIdAndDelete(id);
     await Item.findByIdAndUpdate(itemId, { $pull: { reminders: id } });
-    res.redirect('/items');
+    req.flash('success', 'Successfully Deleted Reminder')
+    res.send('Deleted');
 }

@@ -60,7 +60,7 @@
     border: none;
 }
 
-a {
+.item-tile a {
     text-decoration: inherit;
     color: inherit;
 }
