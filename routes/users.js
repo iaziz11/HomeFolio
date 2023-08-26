@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 router.get('/login', (req, res) => {
   res.render('users/login')
 })
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login', successRedirect: '/items' }));
+router.post('/login', passport.authenticate('local', { failureRedirect: '/login', successRedirect: '/items', failureFlash: 'Username or password is incorrect' }));
 router.get('/register', (req, res) => {
   res.render('users/register');
 })

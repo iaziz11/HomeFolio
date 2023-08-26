@@ -10,7 +10,13 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary,
     params: {
-        folder: 'HomeManager'
+        folder: 'HomeManager',
+        format: async (req, file) => {
+            if (file.mimetype === 'application/pdf') {
+                return 'pdf'
+            }
+            return 'jpg'
+        }
     }
 });
 

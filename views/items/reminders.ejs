@@ -23,15 +23,21 @@
                                     <%= r.text %>
                                 </td>
                                 <td>
-                                    <%= r.every %>
+                                    <% if (r.recurring) { %>
+                                        Yes
+                                        <% } else {%>
+                                            No
+                                            <% } %>
                                 </td>
                                 <td>
                                     <%= r.nextDate %>
                                 </td>
                                 <td>
-                                    <input class="form-check-input" type="checkbox" data-itemid="<%= itemId %>"
-                                        data-id="<%= r._id %>" name="reminder[completed]" <%=r.completed ? "checked"
-                                        : "null" %>>
+                                    <% if (!r.recurring) {%>
+                                        <input class="form-check-input" type="checkbox" data-itemid="<%= itemId %>"
+                                            data-id="<%= r._id %>" name="reminder[completed]" <%=r.completed ? "checked"
+                                            : "null" %>>
+                                        <% } %>
                                 </td>
                                 <td>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
@@ -79,7 +85,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary submit-new-form" id="<%=itemId %>">Save
+                    <button type="button" class="btn btn-primary submit-new-form" id="<%= itemId %>">Save
                         changes</button>
                 </div>
             </div>

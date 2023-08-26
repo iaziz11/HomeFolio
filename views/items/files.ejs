@@ -5,17 +5,62 @@
             <h1>Files</h1>
         </div>
         <div class="row pb-2 pt-4 px-2 text-center" id="item-container">
+            <div class="col-lg-3 col-md-4 col-sm-6 item-tile mb-3 py-0">
+                <button data-bs-toggle="modal" data-bs-target="#newModal" id="newItemButton">
+                    <img class="item-icon" src="https://cdn-icons-png.flaticon.com/512/4211/4211763.png" alt="icon">
+                </button>
+                <p>
+                    Add New File
+                </p>
+            </div>
             <% for (let f of files) {%>
                 <div class="col-lg-3 col-md-4 col-sm-6 item-tile mb-3 py-0">
-                    <% if (f.url.endsWith('pdf')) {%>
-                        <img class="item-icon" src="https://freesvg.org/img/pdf17.png" alt="pdf">
-                        <% } else { %>
-                            <img class="item-icon" src="<%= f.url %>" alt="icon">
-                            <% } %>
-                                <p>
-                                    <%= f.description %>
-                                </p>
+                    <a href="<%= f.url %>" target="_blank">
+                        <% if (f.url.endsWith('pdf')) {%>
+                            <img class="item-icon" src="https://freesvg.org/img/pdf17.png" alt="pdf">
+                            <% } else { %>
+                                <img class="item-icon" src="<%= f.url %>" alt="icon">
+                                <% } %>
+                    </a>
+                    <p>
+                        <span>
+                            <%= f.name %>
+                        </span>
+                        <button class="btn btn-danger btn-sm delete-button" id="<%= f._id %>"
+                            data-itemid="<%= itemId %>"><i class="bi bi-trash-fill"></i></button>
+                    </p>
                 </div>
                 <% } %>
         </div>
     </div>
+
+    <!-- New Modal -->
+    <div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="newModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="newModalLabel">New Item</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalNewForm" enctype="multipart/form-data">
+                        <input type="file" name="uploadFile">
+                        <label for="name">File Name</label>
+                        <input type="text" value="" name="file[name]" id="name">
+                        <label for="isExpense">Is this an expense?</label>
+                        <select name="isExpense" id="isExpense">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-new-form" id="<%= itemId %>">Save
+                        changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/javascripts/files.js"></script>

@@ -21,16 +21,17 @@
                 <div class="col-lg-3 col-md-4 col-sm-6 item-tile mb-3 py-0">
                     <a href="items/<%= i._id %>/reminders">
                         <img class="item-icon" src="<%= i.icon %>" alt="icon">
-                        <div class="mb-1">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
-                                data-bs-id="<%= i._id %>"><i class="bi bi-pencil-square"></i></button>
-                            <span>
-                                <%= i.name %>
-                            </span>
-                            <button class="btn btn-danger delete-button" id="<%= i._id %>"><i
-                                    class="bi bi-trash-fill"></i></button>
-                        </div>
                     </a>
+                    <div class="mb-1">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                            data-bs-id="<%= i._id %>"><i class="bi bi-pencil-square"></i></button>
+                        <span>
+                            <%= i.name %>
+                        </span>
+                        <button class="btn btn-danger delete-button" id="<%= i._id %>"><i
+                                class="bi bi-trash-fill"></i></button>
+                    </div>
+
                 </div>
                 <% } %>
         </div>

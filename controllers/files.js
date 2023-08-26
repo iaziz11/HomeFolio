@@ -31,6 +31,7 @@ async function uploadImageMindee(filePath) {
 }
 module.exports.getFiles = async (req, res) => {
     const { itemId } = req.params;
+    res.locals.itemId = itemId;
     const currentItem = await Item.findById(itemId);
     const files = await File.find({ _id: { $in: currentItem.files } });
     res.render('items/files', { files });
@@ -52,14 +53,27 @@ module.exports.addFile = async (req, res) => {
     currentItem.files.push(newFile._id);
     newFile.item = itemId;
     await newFile.save()
-    if (req.body.isExpense === 'true') {
-        const mindeeResponse = await uploadImageMindee(req.file.path);
-        const newExpense = new Expense({ value: mindeeResponse.total_amount.value, item: itemId, file: newFile._id, name: req.body.file.description, date: Date.now() })
-        currentItem.expenses.push(newExpense);
-        await newExpense.save();
-    }
     await currentItem.save();
-    res.redirect('/items');
+    if (req.body.isExpense === 'true') {
+        try {
+            const mindeeResponse = await uploadImageMindee(req.file.path);
+            if (!mindeeResponse.total_amount.value) {
+                throw new Error()
+            }
+            const value = Math.round(mindeeResponse.total_amount.value * 100);
+            console.log(mindeeResponse)
+            const newExpense = new Expense({ value, item: itemId, file: newFile._id, name: req.body.file.name, date: Date.now() })
+            currentItem.expenses.push(newExpense);
+            await newExpense.save();
+            await currentItem.save();
+        } catch {
+            req.flash('error', 'File added, but expense could not be parsed');
+            res.send('No expense');
+            return
+        }
+    }
+    req.flash('success', 'Added file successfully')
+    res.send('Added');
 }
 
 module.exports.editFile = async (req, res) => {
@@ -73,5 +87,6 @@ module.exports.deleteFile = async (req, res) => {
     const { id, itemId } = req.params;
     await File.findByIdAndDelete(id);
     await Item.findByIdAndUpdate(itemId, { $pull: { files: id } });
-    res.redirect(`${itemId}/files`);
+    req.flash('success', 'Successfully deleted file')
+    res.send('Deleted');
 }

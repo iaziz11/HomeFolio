@@ -13,6 +13,7 @@
                             <th scope="col">Date</th>
                             <th scope="col">File</th>
                             <th scope="col">Expense</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -30,7 +31,14 @@
                                         <% } %>
                                 </td>
                                 <td>
-                                    $<%= e.value %>
+                                    $<%= (e.value/100).toFixed(2) %>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#editModal" data-bs-id="<%= e._id %>"
+                                        data-bs-itemid="<%= itemId %>"><i class="bi bi-pencil-square"></i></button>
+                                    <button class="btn btn-danger btn-sm delete-button" data-id="<%= e._id %>"
+                                        data-itemid="<%= itemId %>"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             </tr>
                             <% } %>
@@ -39,10 +47,73 @@
                         <tr>
                             <th>Total</th>
                             <td colspan="2"></td>
-                            <td>$21,000</td>
+                            <td>$<%= (total/100).toFixed(2) %>
+                            </td>
+                            <td></td>
                         </tr>
                     </tfoot>
                 </table>
+                <div class="mb-3">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newModal">+ Add New
+                        Expense</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- New Modal -->
+    <div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="newModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="newModalLabel">New Item</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalNewForm">
+                        <label for="name">Expense Name</label>
+                        <input type="text" name="expense[name]" id="name">
+                        <label for="value">Value</label>
+                        <input type="number" step="0.01" id="value" name="expense[value]">
+                        <label for="date">Date</label>
+                        <input type="datetime-local" name="expense[date]" id="date">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-new-form" id="<%= itemId %>">Save
+                        changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editModalLabel">Edit Item</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalEditForm">
+                        <label for="name">Expense Name</label>
+                        <input type="text" name="expense[name]" id="name">
+                        <label for="value">Value</label>
+                        <input type="number" step="0.01" id="value" name="expense[value]">
+                        <label for="date">Date</label>
+                        <input type="datetime-local" name="expense[date]" id="date">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-edit-form" data-itemid="" data-id="">Save
+                        changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/javascripts/expenses.js"></script>

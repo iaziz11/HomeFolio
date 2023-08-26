@@ -3,9 +3,18 @@ const Item = require('../models/item');
 
 module.exports.getReminders = async (req, res) => {
     const { itemId } = req.params;
+    res.locals.itemId = itemId;
     const currentItem = await Item.findById(itemId);
     const reminders = await Reminder.find({ _id: { $in: currentItem.reminders } });
-    res.render('items/reminders', { reminders, itemId });
+    const newReminders = reminders.map((e) => {
+        let oldDate = new Date(e.nextDate)
+        let newDate = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear() + ' @ ' + oldDate.getHours() % 12 + ':' + oldDate.getMinutes() + (oldDate.getHours() > 12 ? 'pm' : 'am');
+        return {
+            ...e.toObject(),
+            nextDate: newDate
+        }
+    })
+    res.render('items/reminders', { reminders: newReminders });
 }
 
 module.exports.getReminder = async (req, res) => {
@@ -18,7 +27,7 @@ module.exports.addReminder = async (req, res) => {
     const { itemId } = req.params;
     req.body.reminder.every = req.body.reminder.every.split(" ");
     const newReminder = new Reminder(req.body.reminder);
-    if (newReminder.recurring && newReminder.recurring === 'on') {
+    if (req.body.reminder.recurring) {
         newReminder.recurring = true;
     } else {
         newReminder.recurring = false;

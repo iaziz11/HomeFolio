@@ -41,7 +41,7 @@ module.exports.reminderSchema = Joi.object({
 
 module.exports.fileSchema = Joi.object({
     file: Joi.object({
-        description: Joi.string().required().escapeHTML()
+        name: Joi.string().required().escapeHTML()
     }).required(),
     uploadFile: Joi.string().escapeHTML(),
     isExpense: Joi.string().escapeHTML()
@@ -49,14 +49,12 @@ module.exports.fileSchema = Joi.object({
 
 module.exports.expenseSchema = Joi.object({
     expense: Joi.object({
-        value: Joi.string().required().escapeHTML(),
+        value: Joi.number().required(),
         date: Joi.string().required().escapeHTML(),
         name: Joi.string().required().escapeHTML()
     }).required()
 })
 
 module.exports.userSchema = Joi.object({
-    fullName: Joi.string().required().escapeHTML(),
-    username: Joi.string().required().escapeHTML(),
-    password: Joi.string().required().escapeHTML()
+    fullName: Joi.string().required().escapeHTML()
 })
