@@ -6,8 +6,8 @@ const UserSchema = new Schema({
     fullName: String
 })
 
-UserSchema.virtual('firstName').get(() => {
-    return this.name.split(' ')[0];
+UserSchema.virtual('firstName').get(function () {
+    return this.fullName.split(' ')[0];
 })
 
 UserSchema.plugin(passportLocalMongoose);

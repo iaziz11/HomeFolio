@@ -29,9 +29,19 @@ async function uploadImageMindee(filePath) {
         process.exit(1);
     }
 }
+
+const convertTime = (time) => {
+    return time.getFullYear() +
+        '-' + ((time.getMonth() > 9 ? '' : '0') + (time.getMonth() + 1)) +
+        '-' + ((time.getDate() > 9 ? '' : '0') + time.getDate()) +
+        'T' + ((time.getHours() > 9 ? '' : '0') + time.getHours()) +
+        ':' + ((time.getMinutes() > 9 ? '' : '0') + time.getMinutes());
+};
+
 module.exports.getFiles = async (req, res) => {
     const { itemId } = req.params;
     res.locals.itemId = itemId;
+    const now = new Date()
     const currentItem = await Item.findById(itemId);
     const files = await File.find({ _id: { $in: currentItem.files } });
     res.render('items/files', { files });
@@ -62,11 +72,13 @@ module.exports.addFile = async (req, res) => {
             }
             const value = Math.round(mindeeResponse.total_amount.value * 100);
             console.log(mindeeResponse)
-            const newExpense = new Expense({ value, item: itemId, file: newFile._id, name: req.body.file.name, date: Date.now() })
+            const now = new Date();
+            const newExpense = new Expense({ value, item: itemId, file: newFile._id, name: req.body.file.name, date: convertTime(now) })
             currentItem.expenses.push(newExpense);
             await newExpense.save();
             await currentItem.save();
-        } catch {
+        } catch (e) {
+            console.error(e)
             req.flash('error', 'File added, but expense could not be parsed');
             res.send('No expense');
             return

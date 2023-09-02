@@ -1,6 +1,7 @@
 const Item = require('../models/item');
 
 module.exports.getItems = async (req, res) => {
+    console.log(req.user.firstName)
     const items = await Item.find({ user: req.user._id }).populate('user');
     res.locals.itemId = undefined;
     res.render('items/show', { items });

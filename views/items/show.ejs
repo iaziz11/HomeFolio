@@ -2,36 +2,37 @@
 
     <div class="container-fluid">
         <div class="row text-center">
-            <h1>Items</h1>
+            <h1 class="mb-3">
+                <%= currentUser.firstName %>'s Home
+            </h1>
         </div>
-        <div class="row pb-2 pt-4 px-2 text-center" id="item-container">
-            <div class="col-lg-3 col-md-4 col-sm-6 item-tile mb-3 py-0">
-                <button data-bs-toggle="modal" data-bs-target="#newModal" id="newItemButton">
+        <div id="item-container">
+            <div class="item-tile">
+                <a data-bs-toggle="modal" data-bs-target="#newModal" id="imageAnchor">
                     <img class="item-icon"
                         src="https://cdn.iconscout.com/icon/free/png-256/free-add-new-1439785-1214356.png?f=webp"
                         alt="icon">
-                </button>
-                <div class="mb-1">
-                    <span>
+                </a>
+                <div class="item-row item-row-primary">
+                    <span class="text-span">
                         Add New Item
                     </span>
                 </div>
             </div>
             <% for (let i of items) {%>
-                <div class="col-lg-3 col-md-4 col-sm-6 item-tile mb-3 py-0">
+                <div class="item-tile" data-color="<%= i.color %>">
                     <a href="items/<%= i._id %>/reminders">
-                        <img class="item-icon" src="<%= i.icon %>" alt="icon">
+                        <img class="item-icon icon-shadow" src="<%= i.icon %>" alt="icon">
                     </a>
-                    <div class="mb-1">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                    <div class="item-row">
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
                             data-bs-id="<%= i._id %>"><i class="bi bi-pencil-square"></i></button>
-                        <span>
+                        <span class="text-span">
                             <%= i.name %>
                         </span>
-                        <button class="btn btn-danger delete-button" id="<%= i._id %>"><i
+                        <button class="btn btn-danger btn-sm delete-button" id="<%= i._id %>"><i
                                 class="bi bi-trash-fill"></i></button>
                     </div>
-
                 </div>
                 <% } %>
         </div>
@@ -47,13 +48,28 @@
                 </div>
                 <div class="modal-body">
                     <form id="modalEditForm" enctype="multipart/form-data">
-                        <input type="file" name="uploadFile">
-                        <input type="text" value="" name="item[name]">
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Upload a New Image of Your Item</label>
+                            <input class="form-control" type="file" id="formFile" name="uploadFile">
+                        </div>
+                        <div class="mb-3">
+                            <label for="formControlInput" class="form-label">Change Item Name</label>
+                            <input type="text" class="form-control" id="formControlInput" name="item[name]">
+                        </div>
+                        <label for="colorInput" class="form-label">Pick a New Color for Your Item</label>
+                        <input type="color" class="form-control form-control-color" id="colorInput" value="#563d7c"
+                            title="Choose your color" name="item[color]">
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary submit-edit-form" id="">Save changes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-edit-form" id="">
+                        <span id="editItemText">Save Changes</span>
+                        <div id="editSpinner">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Loading...</span>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
@@ -69,13 +85,28 @@
                 </div>
                 <div class="modal-body">
                     <form id="modalNewForm" enctype="multipart/form-data">
-                        <input type="file" name="uploadFile">
-                        <input type="text" value="" name="item[name]">
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Upload an Image of Your Item</label>
+                            <input class="form-control" type="file" id="formFile" name="uploadFile">
+                        </div>
+                        <div class="mb-3">
+                            <label for="formControlInput" class="form-label">Item Name</label>
+                            <input type="text" class="form-control" id="formControlInput" name="item[name]">
+                        </div>
+                        <label for="colorInput" class="form-label">Pick a Color for Your Item</label>
+                        <input type="color" class="form-control form-control-color" id="colorInput" value="#563d7c"
+                            title="Choose your color" name="item[color]">
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary submit-new-form" id="">Save changes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-new-form" id="">
+                        <span id="newItemText">Add Item</span>
+                        <div id="newSpinner">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Saving...</span>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>

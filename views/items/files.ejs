@@ -2,33 +2,35 @@
 
     <div class="container-fluid">
         <div class="row text-center">
-            <h1>Files</h1>
+            <h1 class="mb-3">Files</h1>
         </div>
-        <div class="row pb-2 pt-4 px-2 text-center" id="item-container">
-            <div class="col-lg-3 col-md-4 col-sm-6 item-tile mb-3 py-0">
-                <button data-bs-toggle="modal" data-bs-target="#newModal" id="newItemButton">
+        <div id="item-container">
+            <div class="item-tile">
+                <a data-bs-toggle="modal" data-bs-target="#newModal" id="imageAnchor">
                     <img class="item-icon" src="https://cdn-icons-png.flaticon.com/512/4211/4211763.png" alt="icon">
-                </button>
-                <p>
-                    Add New File
-                </p>
+                </a>
+                <div class="item-row item-row-primary">
+                    <span class="text-span">
+                        Add New File
+                    </span>
+                </div>
             </div>
             <% for (let f of files) {%>
-                <div class="col-lg-3 col-md-4 col-sm-6 item-tile mb-3 py-0">
+                <div class="item-tile">
                     <a href="<%= f.url %>" target="_blank">
                         <% if (f.url.endsWith('pdf')) {%>
                             <img class="item-icon" src="https://freesvg.org/img/pdf17.png" alt="pdf">
                             <% } else { %>
-                                <img class="item-icon" src="<%= f.url %>" alt="icon">
+                                <img class="item-icon icon-shadow" src="<%= f.url %>" alt="icon">
                                 <% } %>
                     </a>
-                    <p>
-                        <span>
+                    <div class="item-row">
+                        <span class="text-span">
                             <%= f.name %>
                         </span>
                         <button class="btn btn-danger btn-sm delete-button" id="<%= f._id %>"
-                            data-itemid="<%= itemId %>"><i class="bi bi-trash-fill"></i></button>
-                    </p>
+                            data-itemid="<%= itemId %>"><i class=" bi bi-trash-fill"></i></button>
+                    </div>
                 </div>
                 <% } %>
         </div>
@@ -39,25 +41,37 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="newModalLabel">New Item</h1>
+                    <h1 class="modal-title fs-5" id="newModalLabel">New File</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="modalNewForm" enctype="multipart/form-data">
-                        <input type="file" name="uploadFile">
-                        <label for="name">File Name</label>
-                        <input type="text" value="" name="file[name]" id="name">
-                        <label for="isExpense">Is this an expense?</label>
-                        <select name="isExpense" id="isExpense">
-                            <option value="true" selected>Yes</option>
-                            <option value="false">No</option>
-                        </select>
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Upload Your File</label>
+                            <input class="form-control" type="file" id="formFile" name="uploadFile">
+                        </div>
+                        <div class="mb-3">
+                            <label for="formControlInput" class="form-label">File Name</label>
+                            <input type="text" class="form-control" id="formControlInput" name="file[name]">
+                        </div>
+                        <div class="mb-3">
+                            <label for="isExpense" class="form-label">Is this an Expense?</label>
+                            <select class="form-select" name="isExpense" id="isExpense">
+                                <option value="false" selected>No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary submit-new-form" id="<%= itemId %>">Save
-                        changes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-new-form" id="<%= itemId %>">
+                        <span id="newFileText">Add File</span>
+                        <div id="newSpinner">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Saving...</span>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>

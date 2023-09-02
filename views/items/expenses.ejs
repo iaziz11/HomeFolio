@@ -2,7 +2,7 @@
 
     <div class="container">
         <div class="row text-center">
-            <h1>Expenses</h1>
+            <h1 class="mb-3">Expenses</h1>
         </div>
         <div class="row">
             <div class="table-responsive">
@@ -18,22 +18,22 @@
                     </thead>
                     <tbody>
                         <% for (let e of expenses) {%>
-                            <tr>
-                                <td>
+                            <tr class="tr-hover">
+                                <td class="align-middle">
                                     <%= e.name %>
                                 </td>
-                                <td>
+                                <td class="align-middle">
                                     <%= e.date %>
                                 </td>
-                                <td>
+                                <td class="align-middle">
                                     <% if (e.file) {%>
                                         <a href="<%= e.file.url %>" target="_blank">View File</a>
                                         <% } %>
                                 </td>
-                                <td>
+                                <td class="align-middle">
                                     $<%= (e.value/100).toFixed(2) %>
                                 </td>
-                                <td>
+                                <td class="align-middle">
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                         data-bs-target="#editModal" data-bs-id="<%= e._id %>"
                                         data-bs-itemid="<%= itemId %>"><i class="bi bi-pencil-square"></i></button>
@@ -66,23 +66,36 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="newModalLabel">New Item</h1>
+                    <h1 class="modal-title fs-5" id="newModalLabel">New Expense</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="modalNewForm">
-                        <label for="name">Expense Name</label>
-                        <input type="text" name="expense[name]" id="name">
-                        <label for="value">Value</label>
-                        <input type="number" step="0.01" id="value" name="expense[value]">
-                        <label for="date">Date</label>
-                        <input type="datetime-local" name="expense[date]" id="date">
+                        <div class="mb-3">
+                            <label for="newExpenseName" class="form-label">Expense Name</label>
+                            <input type="text" class="form-control" id="newExpenseName" name="expense[name]">
+                        </div>
+                        <label for="newExpenseValue" class="form-label">Value</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">$</span>
+                            <input type="number" step="0.01" class="form-control" aria-label="Amount"
+                                name="expense[value]" id="newExpenseValue">
+                        </div>
+                        <div class="mb-3">
+                            <label for="newDate" class="form-label">Date</label><br>
+                            <input type="datetime-local" name="expense[date]" id="newDate">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary submit-new-form" id="<%= itemId %>">Save
-                        changes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-new-form" id="<%= itemId %>">
+                        <span id="newExpenseText">Add Expense</span>
+                        <div id="newSpinner">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Saving...</span>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
@@ -93,23 +106,36 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="editModalLabel">Edit Item</h1>
+                    <h1 class="modal-title fs-5" id="editModalLabel">Edit Expense</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="modalEditForm">
-                        <label for="name">Expense Name</label>
-                        <input type="text" name="expense[name]" id="name">
-                        <label for="value">Value</label>
-                        <input type="number" step="0.01" id="value" name="expense[value]">
-                        <label for="date">Date</label>
-                        <input type="datetime-local" name="expense[date]" id="date">
+                        <div class="mb-3">
+                            <label for="editExpenseName" class="form-label">Expense Name</label>
+                            <input type="text" class="form-control" id="editExpenseName" name="expense[name]">
+                        </div>
+                        <label for="editExpenseValue" class="form-label">Value</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">$</span>
+                            <input type="number" step="0.01" class="form-control" aria-label="Amount"
+                                name="expense[value]" id="editExpenseValue">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDate" class="form-label">Date</label><br>
+                            <input type="datetime-local" name="expense[date]" id="editDate">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary submit-edit-form" data-itemid="" data-id="">Save
-                        changes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit-edit-form" data-itemid="" data-id="">
+                        <span id="editExpenseText">Save Changes</span>
+                        <div id="editSpinner">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Saving...</span>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>

@@ -1,5 +1,7 @@
 jQuery(function () {
     $('.submit-new-form').on('click', function () {
+        $('#newFileText').css('display', 'none');
+        $('#newSpinner').css('display', 'block');
         $.ajax({
             url: '/items/' + this.id + "/files",
             method: 'POST',
@@ -7,6 +9,10 @@ jQuery(function () {
             processData: false,
             contentType: false
         })
+            .always(function () {
+                $('#newFileText').css('display', 'inline');
+                $('#newSpinner').css('display', 'none');
+            })
             .done(function () {
                 console.log('Added successfully!')
                 window.location.reload()
@@ -20,8 +26,6 @@ jQuery(function () {
     })
 
     $(".delete-button").on('click', function () {
-        console.log($(this).attr('data-itemid'))
-        console.log(this.id)
         $.ajax({
             url: "/items/" + $(this).attr('data-itemid') + '/files/' + this.id,
             type: 'DELETE'

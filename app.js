@@ -18,8 +18,8 @@ const MongoStore = require('connect-mongo');
 const mongoSanitize = require('express-mongo-sanitize');
 const User = require('./models/user.js');
 const nodemailer = require("nodemailer");
-require('./scheduler');
-
+const scheduler = require('./scheduler');
+const expenses = require('./controllers/expenses.js')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const remindersRouter = require('./routes/reminders');
@@ -96,7 +96,7 @@ app.use('/items', itemsRouter)
 app.use('/items/:itemId/reminders', remindersRouter)
 app.use('/items/:itemId/expenses', expensesRouter)
 app.use('/items/:itemId/files', filesRouter)
-
+app.get('/allexpenses', expenses.getAllExpenses)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

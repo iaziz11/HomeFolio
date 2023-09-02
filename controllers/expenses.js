@@ -1,5 +1,6 @@
 const Expense = require('../models/expense');
 const Item = require('../models/item');
+const { militaryToStandardTime } = require('../utils');
 
 module.exports.getExpenses = async (req, res) => {
     const { itemId } = req.params;
@@ -9,13 +10,33 @@ module.exports.getExpenses = async (req, res) => {
     let total = expenses.reduce((r, e) => r + e.value, 0);
     const newExpenses = expenses.map((e) => {
         let oldDate = new Date(e.date)
-        let newDate = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear() + ' @ ' + oldDate.getHours() % 12 + ':' + oldDate.getMinutes() + (oldDate.getHours() > 12 ? 'pm' : 'am');
+        let newDate = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear() + ' @ ' + militaryToStandardTime(oldDate.toTimeString());
         return {
             ...e.toObject(),
             date: newDate
         }
     })
     res.render('items/expenses', { expenses: newExpenses, total });
+}
+
+module.exports.getAllExpenses = async (req, res) => {
+    console.log(req.user._id)
+    let expenseDict = {}
+    const userItems = await Item.find({ user: req.user._id });
+    const userItemsIds = userItems.map((e) => e._id)
+    const expenses = await Expense.find({ item: { $in: userItemsIds } }).populate('item');
+
+    expenses.map((e) => {
+        console.log(e.item)
+        if (!(e.item._id in expenseDict)) {
+            console.log('first')
+            expenseDict[e.item._id] = [e.value, e.item.color, e.item.name];
+        } else {
+            expenseDict[e.item._id][0] += e.value;
+        }
+    })
+    console.log(expenseDict)
+    res.render('allexpenses', { expenseDict: JSON.stringify(expenseDict) })
 }
 
 module.exports.getExpense = async (req, res) => {
@@ -40,6 +61,7 @@ module.exports.addExpense = async (req, res) => {
 module.exports.editExpense = async (req, res) => {
     const { id } = req.params;
     const newExpense = req.body.expense;
+    req.body.expense.value = Math.round(req.body.expense.value * 100)
     const expense = await Expense.findByIdAndUpdate(id, newExpense, { new: true, runValidators: true });
     req.flash('success', 'Successfully edited expense')
     res.send(expense);

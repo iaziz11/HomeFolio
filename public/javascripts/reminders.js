@@ -1,10 +1,37 @@
 jQuery(function () {
+
+    $('#modalNewForm #newCheck').on('change', function () {
+        if ($('#modalNewForm #newCheck').is(':checked')) {
+            $('#newRemindText').text("Remind Me Starting:");
+            $('#newEveryContainer').show();
+        } else {
+            $('#newRemindText').text("Remind Me On:");
+            $('#newEveryContainer').hide();
+        }
+    })
+
+    $('#modalEditForm #editCheck').on('change', function () {
+        if ($('#modalEditForm #editCheck').is(':checked')) {
+            $('#editRemindText').text("Remind Me Starting:");
+            $('#editEveryContainer').show();
+        } else {
+            $('#editRemindText').text("Remind Me On:");
+            $('#editEveryContainer').hide();
+        }
+    })
+
     $('.submit-new-form').on('click', function () {
+        $('#newReminderText').css('display', 'none');
+        $('#newSpinner').css('display', 'block');
         $.ajax({
             url: '/items/' + this.id + "/reminders",
             method: 'POST',
             data: $('#modalNewForm').serialize()
         })
+            .always(function () {
+                $('#newReminderText').css('display', 'inline');
+                $('#newSpinner').css('display', 'none');
+            })
             .done(function () {
                 console.log('Added successfully!')
                 window.location.reload()
@@ -17,7 +44,7 @@ jQuery(function () {
             })
     })
 
-    $('.form-check-input').on('change', function () {
+    $('table .form-check-input').on('change', function () {
         let sendData = this.name + '=' + this.checked;
         let url = '/items/' + $(this).attr('data-itemid') + '/reminders/' + $(this).attr('data-id') + '/toggleCompleted'
         $.ajax({
@@ -45,12 +72,14 @@ jQuery(function () {
             .done(function (data) {
                 const d = new Date(data.nextDate);
                 const dateTimeLocalValue = (new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString()).slice(0, -1);
-                $('#modalEditForm #text').val(data.text);
-                $('#modalEditForm #recurring').prop('checked', data.recurring);
-                $('#modalEditForm #nextDate').val(dateTimeLocalValue);
-                $(`#modalEditForm #every option[value='${data.every.join(' ')}']`).attr('selected', 'true');
+                console.log(d);
+                console.log(dateTimeLocalValue)
+                $('#modalEditForm #editReminderName').val(data.text);
+                $('#modalEditForm #editCheck').prop('checked', data.recurring).trigger('change')
+                $('#modalEditForm #editNextDate').val(dateTimeLocalValue);
+                $(`#modalEditForm #editEvery option[value='${data.every.join(' ')}']`).attr('selected', 'true');
                 $('.submit-edit-form').attr('data-itemid', $(button).attr('data-bs-itemid'));
-                $('.submit-edit-form').attr('data-id', $(button).attr('data-bs-id'))
+                $('.submit-edit-form').attr('data-id', $(button).attr('data-bs-id'));
             })
             .fail(function (xhr, status, errorThrown) {
                 alert("Sorry, there was a problem!");
@@ -60,7 +89,15 @@ jQuery(function () {
             })
     })
 
+    $("#editModal").on('hide.bs.modal', function (e) {
+        $('#editRemindText').text("Remind Me On:");
+        $('#editEveryContainer').hide();
+        $('#modalEditForm')[0].reset();
+    })
+
     $('.submit-edit-form').on('click', function () {
+        $('#editReminderText').css('display', 'none');
+        $('#editSpinner').css('display', 'block');
         let itemId = $(this).attr('data-itemid');
         let id = $(this).attr('data-id');
         $.ajax({
@@ -68,6 +105,10 @@ jQuery(function () {
             method: 'PUT',
             data: $('#modalEditForm').serialize()
         })
+            .always(function () {
+                $('#editReminderText').css('display', 'inline');
+                $('#editSpinner').css('display', 'none');
+            })
             .done(function () {
                 console.log('Added successfully!')
                 window.location.reload()

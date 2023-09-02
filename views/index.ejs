@@ -1,23 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout('layouts/boilerplate') %>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
+  <div class="container splash text-center">
+    <div class="row">
+      <h1>Welcome to HomeFolio!</h1>
+    </div>
+    <div class="row mt-5">
+      <p>Keep track of files and expenses for all of your household items, and add reminders to help you stay on top of
+        things, all in one place.</p>
+    </div>
+    <div class="row mt-5">
+      <a href="/items">
+        <button class="btn btn-primary btn-large">
+          Get started <i class="bi bi-arrow-right"></i>
+        </button>
+      </a>
+    </div>
+  </div>
 
-<body>
-  <form action='/items/64e4d9006bcd7b133fb6f8ae/files' method="post" enctype="multipart/form-data">
-    <label for="body">Text</label>
-    <input type="text" id="body" name="file[description]">
-    <input type="file" name="uploadFile">
-    <select name="isExpense" id="isExpense">
-      <option value="true" selected>Yes</option>
-      <option value="false">No</option>
-    </select>
-    <button>Submit</button>
-  </form>
-</body>
-
-</html>
+  <script src="/javascripts/indexPage.js"></script>

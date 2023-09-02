@@ -8,6 +8,7 @@ const Schema = mongoose.Schema;
 const ItemSchema = new Schema({
     name: String,
     icon: String,
+    color: String,
     expenses: [{
         type: Schema.Types.ObjectId,
         ref: 'Expense'

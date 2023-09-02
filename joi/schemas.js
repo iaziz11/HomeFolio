@@ -25,7 +25,8 @@ const Joi = BaseJoi.extend(extension);
 
 module.exports.itemSchema = Joi.object({
     item: Joi.object({
-        name: Joi.string().required().escapeHTML()
+        name: Joi.string().required().escapeHTML(),
+        color: Joi.string().required().escapeHTML()
     }).required(),
     uploadFile: Joi.string().escapeHTML(),
 })
@@ -34,7 +35,7 @@ module.exports.reminderSchema = Joi.object({
     reminder: Joi.object({
         text: Joi.string().required().escapeHTML(),
         nextDate: Joi.string().required().escapeHTML(),
-        recurring: Joi.string(),
+        recurring: Joi.string().allow(''),
         every: Joi.string().escapeHTML()
     }).required()
 })
@@ -56,5 +57,7 @@ module.exports.expenseSchema = Joi.object({
 })
 
 module.exports.userSchema = Joi.object({
-    fullName: Joi.string().required().escapeHTML()
+    fullName: Joi.string().required().escapeHTML(),
+    username: Joi.string().required().escapeHTML(),
+    password: Joi.string().required().escapeHTML()
 })
