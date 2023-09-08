@@ -1,40 +1,55 @@
 <% layout('layouts/boilerplate') %>
 
-    <div class="container-fluid">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-md-6 py-3" id="login-container">
-                <div class="row mb-3">
-                    <div class="col text-center">
-                        <h1>Register</h1>
-                    </div>
-                </div>
-                <div class="row px-4">
-                    <div class="col">
-                        <form action="/register" method="post">
-                            <div class="mb-3">
-                                <label for="fullName" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="fullName" name="fullName"
-                                    aria-describedby="nameHelp">
-                                <div id="nameHelp" class="form-text"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="email" name="username"
-                                    aria-describedby="emailHelp">
-                                <div id="emailHelp" class="form-text"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password">
-                            </div>
-                            <div class="row">
-                                <div class="col text-center">
-                                    <button type="submit" class="btn btn-primary">Register</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+<div class="container-fluid">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-md-6 py-3" id="login-container">
+      <div class="row mb-3">
+        <div class="col text-center">
+          <h1>Register</h1>
         </div>
+      </div>
+      <div class="row px-4">
+        <div class="col">
+          <form action="/register" method="post">
+            <div class="mb-3">
+              <label for="fullName" class="form-label">Full Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="fullName"
+                name="fullName"
+                aria-describedby="nameHelp"
+              />
+              <div id="nameHelp" class="form-text"></div>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="username"
+                aria-describedby="emailHelp"
+              />
+              <div id="emailHelp" class="form-text"></div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+              />
+            </div>
+            <div class="row">
+              <div class="col text-center">
+                <button type="submit" class="btn btn-primary">Register</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
