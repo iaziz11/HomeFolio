@@ -10,7 +10,12 @@
       </div>
       <div class="row px-4">
         <div class="col">
-          <form action="/login" method="post">
+          <form
+            action="/login"
+            method="post"
+            class="needs-validation"
+            novalidate
+          >
             <div class="mb-3">
               <label for="email" class="form-label">Email address</label>
               <input
@@ -18,7 +23,9 @@
                 class="form-control"
                 id="email"
                 name="username"
+                required
               />
+              <div class="invalid-feedback">Please enter email.</div>
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
@@ -27,7 +34,9 @@
                 class="form-control"
                 id="password"
                 name="password"
+                required
               />
+              <div class="invalid-feedback">Please enter password.</div>
             </div>
             <div class="row">
               <div class="col text-center">
@@ -40,3 +49,5 @@
     </div>
   </div>
 </div>
+
+<script src="/javascripts/validateForms.js"></script>

@@ -89,7 +89,7 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form id="modalNewForm">
+        <form id="modalNewForm" class="needs-validation" novalidate>
           <div class="mb-3">
             <label for="newReminderName" class="form-label"
               >Reminder Name</label
@@ -99,7 +99,9 @@
               class="form-control"
               id="newReminderName"
               name="reminder[text]"
+              required
             />
+            <div class="invalid-feedback">Please enter name.</div>
           </div>
           <div class="mb-3">
             <label class="form-check-label" for="newCheck">
@@ -121,7 +123,9 @@
               type="datetime-local"
               name="reminder[nextDate]"
               id="newNextDate"
+              required
             />
+            <div class="invalid-feedback">Please enter a date.</div>
           </div>
           <div class="container-fluid px-0 mx-0" id="newEveryContainer">
             <div class="row mb-3">
@@ -135,8 +139,11 @@
                   name="reminder[everyPeriod]"
                   placeholder="1"
                   value="1"
+                  min="1"
+                  max="999"
                   id="everyPeriod"
                 />
+                <div class="invalid-feedback">Please enter a valid number.</div>
               </div>
               <div class="col-6">
                 <select
@@ -198,7 +205,7 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form id="modalEditForm">
+        <form id="modalEditForm" class="needs-validation" novalidate>
           <div class="mb-3">
             <label for="editReminderName" class="form-label"
               >Reminder Name</label
@@ -208,7 +215,9 @@
               class="form-control"
               id="editReminderName"
               name="reminder[text]"
+              required
             />
+            <div class="invalid-feedback">Please enter name.</div>
           </div>
           <div class="mb-3">
             <label class="form-check-label" for="editCheck">
@@ -230,7 +239,9 @@
               type="datetime-local"
               name="reminder[nextDate]"
               id="editNextDate"
+              required
             />
+            <div class="invalid-feedback">Please enter a date.</div>
           </div>
           <div class="container-fluid px-0 mx-0" id="editEveryContainer">
             <div class="row mb-3">
@@ -245,7 +256,11 @@
                   placeholder="1"
                   value="1"
                   id="editEveryPeriod"
+                  min="1"
+                  max="999"
+                  required
                 />
+                <div class="invalid-feedback">Please enter a valid number.</div>
               </div>
               <div class="col-6">
                 <select
@@ -265,7 +280,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
           Close
         </button>
         <button
@@ -287,5 +302,5 @@
     </div>
   </div>
 </div>
-
+<script src="/javascripts/validateForms.js"></script>
 <script src="/javascripts/reminders.js"></script>

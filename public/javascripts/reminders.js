@@ -3,9 +3,11 @@ jQuery(function () {
     if ($("#modalNewForm #newCheck").is(":checked")) {
       $("#newRemindText").text("Remind Me Starting:");
       $("#newEveryContainer").show();
+      $("#everyPeriod").attr("required", true);
     } else {
       $("#newRemindText").text("Remind Me On:");
       $("#newEveryContainer").hide();
+      $("#everyPeriod").attr("required", false);
     }
   });
 
@@ -13,13 +15,19 @@ jQuery(function () {
     if ($("#modalEditForm #editCheck").is(":checked")) {
       $("#editRemindText").text("Remind Me Starting:");
       $("#editEveryContainer").show();
+      $("#editEveryPeriod").attr("required", true);
     } else {
       $("#editRemindText").text("Remind Me On:");
       $("#editEveryContainer").hide();
+      $("#editEveryPeriod").attr("required", false);
     }
   });
 
   $(".submit-new-form").on("click", function () {
+    $("#modalNewForm").addClass("was-validated");
+    if (!document.querySelector("#modalNewForm").checkValidity()) {
+      return;
+    }
     $("#newReminderText").css("display", "none");
     $("#newSpinner").css("display", "block");
     $.ajax({
@@ -118,11 +126,20 @@ jQuery(function () {
 
   $("#editModal").on("hide.bs.modal", function (e) {
     $("#editRemindText").text("Remind Me On:");
+    $("#modalEditForm").removeClass("was-validated");
     $("#editEveryContainer").hide();
     $("#modalEditForm")[0].reset();
   });
 
+  $("#newModal").on("hide.bs.modal", function (e) {
+    $("#modalNewForm").removeClass("was-validated");
+  });
+
   $(".submit-edit-form").on("click", function () {
+    $("#modalEditForm").addClass("was-validated");
+    if (!document.querySelector("#modalEditForm").checkValidity()) {
+      return;
+    }
     $("#editReminderText").css("display", "none");
     $("#editSpinner").css("display", "block");
     let itemId = $(this).attr("data-itemid");

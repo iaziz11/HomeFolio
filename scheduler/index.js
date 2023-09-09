@@ -58,12 +58,14 @@ agenda.define("query reminders", async (job) => {
         rr.every.reduce(function (r, a, i) {
           return r + a * timeArray[i];
         }, 0)
-    ).toISOString();
+    )
+      .toISOString()
+      .slice(0, -4);
     await sendEmail(
       rr.user.username,
       `Your reminder to ${rr.text}`,
       `<h1>Hello ${rr.user.firstName}</h1> 
-      <p>You have to ${rr.text}</p>
+      <p>This is your recurring reminder to ${rr.text}</p>
       <p>Your next reminder will be on ${rr.nextDate.toISOString()}</p>`
     );
     await rr.save();

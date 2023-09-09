@@ -2,6 +2,24 @@ const Reminder = require("../models/reminder");
 const Item = require("../models/item");
 const { militaryToStandardTime } = require("../utils");
 
+function setEveryPeriod(oldEvery, period) {
+  switch (oldEvery) {
+    case "0 0 0 1 0 0":
+      return `${period > 1 ? `${period} days` : "day"}`;
+      break;
+    case "0 0 1 0 0 0":
+      return `${period > 1 ? `${period} weeks` : "week"}`;
+      break;
+    case "0 1 0 0 0 0":
+      return `${period > 1 ? `${period} months` : "month"}`;
+      break;
+    case "1 0 0 0 0 0":
+      return `${period > 1 ? `${period} years` : "year"}`;
+    default:
+      return undefined;
+  }
+}
+
 module.exports.getReminders = async (req, res, next) => {
   const { itemId } = req.params;
   res.locals.itemId = itemId;
@@ -46,37 +64,12 @@ module.exports.addReminder = async (req, res) => {
   req.body.reminder.every = req.body.reminder.every
     .replace("1", req.body.reminder.everyPeriod)
     .split(" ");
-  switch (oldEvery) {
-    case "0 0 0 1 0 0":
-      req.body.reminder.everyPeriod = `${
-        req.body.reminder.everyPeriod > 1
-          ? `${req.body.reminder.everyPeriod} days`
-          : "day"
-      }`;
-      break;
-    case "0 0 1 0 0 0":
-      req.body.reminder.everyPeriod = `${
-        req.body.reminder.everyPeriod > 1
-          ? `${req.body.reminder.everyPeriod} weeks`
-          : "week"
-      }`;
-      break;
-    case "0 1 0 0 0 0":
-      req.body.reminder.everyPeriod = `${req.body.reminder.everyPeriod} ${
-        req.body.reminder.everyPeriod > 1
-          ? `${req.body.reminder.everyPeriod} months`
-          : "month"
-      }`;
-      break;
-    case "1 0 0 0 0 0":
-      req.body.reminder.everyPeriod = `${
-        req.body.reminder.everyPeriod > 1
-          ? `${req.body.reminder.everyPeriod} years`
-          : "year"
-      }`;
-      break;
-  }
-  req.body.reminder.everyPeriod;
+
+  req.body.reminder.everyPeriod = setEveryPeriod(
+    oldEvery,
+    req.body.reminder.everyPeriod
+  );
+
   const newReminder = new Reminder(req.body.reminder);
   if (req.body.reminder.recurring !== undefined) {
     newReminder.recurring = true;
@@ -97,13 +90,21 @@ module.exports.addReminder = async (req, res) => {
 
 module.exports.editReminder = async (req, res) => {
   const { id } = req.params;
+  let oldEvery = req.body.reminder.every;
+  req.body.reminder.every = req.body.reminder.every
+    .replace("1", req.body.reminder.everyPeriod)
+    .split(" ");
+
+  req.body.reminder.everyPeriod = setEveryPeriod(
+    oldEvery,
+    req.body.reminder.everyPeriod
+  );
   const newReminder = req.body.reminder;
   if (req.body.reminder.recurring !== undefined) {
     newReminder.recurring = true;
   } else {
     newReminder.recurring = false;
   }
-  newReminder.every ? (newReminder.every = newReminder.every.split(" ")) : null;
   const reminder = await Reminder.findByIdAndUpdate(id, newReminder, {
     new: true,
     runValidators: true,

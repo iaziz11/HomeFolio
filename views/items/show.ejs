@@ -1,115 +1,206 @@
 <% layout('layouts/boilerplate') %>
 
-    <div class="container-fluid">
-        <div class="row text-center">
-            <h1 class="mb-3">
-                <%= currentUser.firstName %>'s Home
-            </h1>
-        </div>
-        <div id="item-container">
-            <div class="item-tile">
-                <a data-bs-toggle="modal" data-bs-target="#newModal" id="imageAnchor">
-                    <img class="item-icon"
-                        src="https://cdn.iconscout.com/icon/free/png-256/free-add-new-1439785-1214356.png?f=webp"
-                        alt="icon">
-                </a>
-                <div class="item-row item-row-primary">
-                    <span class="text-span">
-                        Add New Item
-                    </span>
-                </div>
-            </div>
-            <% for (let i of items) {%>
-                <div class="item-tile" data-color="<%= i.color %>">
-                    <a href="items/<%= i._id %>/reminders">
-                        <img class="item-icon icon-shadow" src="<%= i.icon %>" alt="icon">
-                    </a>
-                    <div class="item-row">
-                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
-                            data-bs-id="<%= i._id %>"><i class="bi bi-pencil-square"></i></button>
-                        <span class="text-span">
-                            <%= i.name %>
-                        </span>
-                        <button class="btn btn-danger btn-sm delete-button" id="<%= i._id %>"><i
-                                class="bi bi-trash-fill"></i></button>
-                    </div>
-                </div>
-                <% } %>
-        </div>
+<div class="container-fluid">
+  <div class="row text-center">
+    <h1 class="mb-3"><%= currentUser.firstName %>'s Home</h1>
+  </div>
+  <div id="item-container">
+    <div class="item-tile">
+      <a data-bs-toggle="modal" data-bs-target="#newModal" id="imageAnchor">
+        <img
+          class="item-icon"
+          src="https://cdn.iconscout.com/icon/free/png-256/free-add-new-1439785-1214356.png?f=webp"
+          alt="icon"
+        />
+      </a>
+      <div class="item-row item-row-primary">
+        <span class="text-span"> Add New Item </span>
+      </div>
     </div>
-
-    <!-- Edit Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="editModalLabel">Edit Item</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="modalEditForm" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="formFile" class="form-label">Upload a New Image of Your Item</label>
-                            <input class="form-control" type="file" id="formFile" name="uploadFile">
-                        </div>
-                        <div class="mb-3">
-                            <label for="formControlInput" class="form-label">Change Item Name</label>
-                            <input type="text" class="form-control" id="formControlInput" name="item[name]">
-                        </div>
-                        <label for="colorInput" class="form-label">Pick a New Color for Your Item</label>
-                        <input type="color" class="form-control form-control-color" id="colorInput" value="#563d7c"
-                            title="Choose your color" name="item[color]">
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary submit-edit-form" id="">
-                        <span id="editItemText">Save Changes</span>
-                        <div id="editSpinner">
-                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                            <span role="status">Loading...</span>
-                        </div>
-                    </button>
-                </div>
-            </div>
-        </div>
+    <% for (let i of items) {%>
+    <div class="item-tile" data-color="<%= i.color %>">
+      <a href="items/<%= i._id %>/reminders">
+        <img class="item-icon icon-shadow" src="<%= i.icon %>" alt="icon" />
+      </a>
+      <div class="item-row">
+        <button
+          class="btn btn-primary btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#editModal"
+          data-bs-id="<%= i._id %>"
+        >
+          <i class="bi bi-pencil-square"></i>
+        </button>
+        <span class="text-span"> <%= i.name %> </span>
+        <button class="btn btn-danger btn-sm delete-button" id="<%= i._id %>">
+          <i class="bi bi-trash-fill"></i>
+        </button>
+      </div>
     </div>
+    <% } %>
+  </div>
+</div>
 
-    <!-- New Modal -->
-    <div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="newModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="newModalLabel">New Item</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="modalNewForm" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="formFile" class="form-label">Upload an Image of Your Item</label>
-                            <input class="form-control" type="file" id="formFile" name="uploadFile">
-                        </div>
-                        <div class="mb-3">
-                            <label for="formControlInput" class="form-label">Item Name</label>
-                            <input type="text" class="form-control" id="formControlInput" name="item[name]">
-                        </div>
-                        <label for="colorInput" class="form-label">Pick a Color for Your Item</label>
-                        <input type="color" class="form-control form-control-color" id="colorInput" value="#563d7c"
-                            title="Choose your color" name="item[color]">
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary submit-new-form" id="">
-                        <span id="newItemText">Add Item</span>
-                        <div id="newSpinner">
-                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                            <span role="status">Saving...</span>
-                        </div>
-                    </button>
-                </div>
-            </div>
-        </div>
+<!-- Edit Modal -->
+<div
+  class="modal fade"
+  id="editModal"
+  tabindex="-1"
+  aria-labelledby="editModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editModalLabel">Edit Item</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          id="modalEditForm"
+          enctype="multipart/form-data"
+          class="needs-validation"
+          novalidate
+        >
+          <div class="mb-3">
+            <label for="formFile" class="form-label"
+              >Upload a New Image of Your Item</label
+            >
+            <input
+              class="form-control"
+              type="file"
+              id="formFile"
+              name="uploadFile"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="formControlInput" class="form-label"
+              >Change Item Name</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="formControlInput"
+              name="item[name]"
+              required
+            />
+            <div class="invalid-feedback">Please enter a name.</div>
+          </div>
+          <label for="colorInput" class="form-label"
+            >Pick a New Color for Your Item</label
+          >
+          <input
+            type="color"
+            class="form-control form-control-color"
+            id="colorInput"
+            value="#563d7c"
+            title="Choose your color"
+            name="item[color]"
+          />
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary submit-edit-form" id="">
+          <span id="editItemText">Save Changes</span>
+          <div id="editSpinner">
+            <span
+              class="spinner-border spinner-border-sm"
+              aria-hidden="true"
+            ></span>
+            <span role="status">Loading...</span>
+          </div>
+        </button>
+      </div>
     </div>
+  </div>
+</div>
 
-    <script src="/javascripts/itemsIndex.js"></script>
+<!-- New Modal -->
+<div
+  class="modal fade"
+  id="newModal"
+  tabindex="-1"
+  aria-labelledby="newModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="newModalLabel">New Item</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          id="modalNewForm"
+          enctype="multipart/form-data"
+          class="needs-validation"
+          novalidate
+        >
+          <div class="mb-3">
+            <label for="formFile" class="form-label"
+              >Upload an Image of Your Item</label
+            >
+            <input
+              class="form-control"
+              type="file"
+              id="formFile"
+              name="uploadFile"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="formControlInput" class="form-label">Item Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="formControlInput"
+              name="item[name]"
+              required
+            />
+            <div class="invalid-feedback">Please enter a name.</div>
+          </div>
+          <label for="colorInput" class="form-label"
+            >Pick a Color for Your Item</label
+          >
+          <input
+            type="color"
+            class="form-control form-control-color"
+            id="colorInput"
+            value="#563d7c"
+            title="Choose your color"
+            name="item[color]"
+          />
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary submit-new-form" id="">
+          <span id="newItemText">Add Item</span>
+          <div id="newSpinner">
+            <span
+              class="spinner-border spinner-border-sm"
+              aria-hidden="true"
+            ></span>
+            <span role="status">Saving...</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/javascripts/itemsIndex.js"></script>

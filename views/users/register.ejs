@@ -10,7 +10,12 @@
       </div>
       <div class="row px-4">
         <div class="col">
-          <form action="/register" method="post">
+          <form
+            action="/register"
+            method="post"
+            class="needs-validation"
+            novalidate
+          >
             <div class="mb-3">
               <label for="fullName" class="form-label">Full Name</label>
               <input
@@ -18,9 +23,9 @@
                 class="form-control"
                 id="fullName"
                 name="fullName"
-                aria-describedby="nameHelp"
+                required
               />
-              <div id="nameHelp" class="form-text"></div>
+              <div class="invalid-feedback">Please enter name.</div>
             </div>
             <div class="mb-3">
               <label for="email" class="form-label">Email address</label>
@@ -29,9 +34,9 @@
                 class="form-control"
                 id="email"
                 name="username"
-                aria-describedby="emailHelp"
+                required
               />
-              <div id="emailHelp" class="form-text"></div>
+              <div class="invalid-feedback">Please enter a valid email.</div>
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
@@ -40,7 +45,14 @@
                 class="form-control"
                 id="password"
                 name="password"
+                minlength="6"
+                maxlength="20"
+                required
               />
+              <div class="invalid-feedback">
+                Please enter a valid password. Password must be between 6 and 20
+                characters.
+              </div>
             </div>
             <div class="row">
               <div class="col text-center">
@@ -53,3 +65,5 @@
     </div>
   </div>
 </div>
+
+<script src="/javascripts/validateForms.js"></script>
