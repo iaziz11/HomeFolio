@@ -3,6 +3,7 @@
 <div class="container-fluid">
   <div class="row text-center">
     <h1 class="mb-3">Files</h1>
+    <h3 class="mb-3 secondary-header"><%= currentItem %></h3>
   </div>
   <div id="item-container">
     <div class="item-tile">
@@ -89,6 +90,7 @@
               class="form-control"
               id="formControlInput"
               name="file[name]"
+              maxlength="20"
               required
             />
             <div class="invalid-feedback">Please add a name.</div>

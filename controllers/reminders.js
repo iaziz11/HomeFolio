@@ -45,7 +45,10 @@ module.exports.getReminders = async (req, res, next) => {
         nextDate: newDate,
       };
     });
-    res.render("items/reminders", { reminders: newReminders });
+    res.render("items/reminders", {
+      reminders: newReminders,
+      currentItem: currentItem.name,
+    });
   } catch (e) {
     return next(e);
   }
