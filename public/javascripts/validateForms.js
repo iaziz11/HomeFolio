@@ -9,7 +9,18 @@
     form.addEventListener(
       "submit",
       (event) => {
+        if ($("#password").val() !== $("#confirm-password").val()) {
+          $(".form-text").hide();
+          $("#confirm-password-feedback").text("Passwords must match.");
+          $("#confirm-password").addClass("is-invalid");
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+
         if (!form.checkValidity()) {
+          $(".form-text").hide();
+          $("#confirm-password-feedback").text("");
           event.preventDefault();
           event.stopPropagation();
         }

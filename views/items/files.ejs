@@ -97,10 +97,19 @@
             <label for="isExpense" class="form-label"
               >Is this an Expense?</label
             >
-            <select class="form-select" name="isExpense" id="isExpense">
+            <select
+              class="form-select"
+              name="isExpense"
+              id="isExpense"
+              aria-describedby="expense-help"
+            >
               <option value="false" selected>No</option>
               <option value="true">Yes</option>
             </select>
+            <div class="form-text" id="expense-help">
+              Select "Yes" to scan file and automatically add expense if
+              applicable.
+            </div>
           </div>
         </form>
       </div>

@@ -41,6 +41,7 @@
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
               <input
+                aria-describedby="password-help"
                 type="password"
                 class="form-control"
                 id="password"
@@ -52,6 +53,25 @@
               <div class="invalid-feedback">
                 Please enter a valid password. Password must be between 6 and 20
                 characters.
+              </div>
+              <div class="form-text" id="password-help">
+                Password must be between 6 and 20 characters.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="confirm-password" class="form-label"
+                >Confirm Password</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="confirm-password"
+                minlength="6"
+                maxlength="20"
+                required
+              />
+              <div class="invalid-feedback" id="confirm-password-feedback">
+                Please confirm password.
               </div>
             </div>
             <div class="row">

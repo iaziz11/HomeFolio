@@ -20,7 +20,8 @@
     <% for (let i of items) {%>
     <div class="item-tile" data-color="<%= i.color %>">
       <a href="items/<%= i._id %>/reminders">
-        <img class="item-icon icon-shadow" src="<%= i.icon %>" alt="icon" />
+        <img class="item-icon <%= i.img ? "icon-shadow" : "" %>" src="<%= i.icon
+        || "/images/no-image.png" %>" alt="icon" />
       </a>
       <div class="item-row">
         <button
