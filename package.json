@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
-    "prepare": "husky install"
+    "start": "nodemon ./bin/www"
   },
   "dependencies": {
     "@hokify/agenda": "^6.3.0",
