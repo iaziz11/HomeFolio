@@ -17,37 +17,39 @@ const timeArray = [
   1000 * 60,
 ];
 
-agenda.define("query reminders", async (job) => {
+agenda.define("check reminders", async (job) => {
   const recurringReminders = await Reminder.find({
     recurring: true,
-    nextDate: { $lte: new Date().toISOString() },
-  }).populate("user");
+    nextDate: { $lte: new Date() },
+  })
+    .populate("user")
+    .populate("item");
   const singleReminder = await Reminder.find({
     recurring: false,
     sent: false,
     completed: false,
-    nextDate: { $lte: new Date().toISOString() },
-  }).populate("user");
+    nextDate: { $lte: new Date() },
+  })
+    .populate("user")
+    .populate("item");
   console.log(new Date().toISOString());
   console.log(recurringReminders);
   console.log(singleReminder);
   for (let rr of recurringReminders) {
     rr.nextDate = new Date(
-      Date.now() +
+      rr.nextDate.getTime() +
         rr.every.reduce(function (r, a, i) {
           return r + a * timeArray[i];
         }, 0)
-    )
-      .toISOString()
-      .slice(0, -4);
+    ).toISOString();
+    await rr.save();
     await sendEmail(
       rr.user.username,
       `Your reminder to ${rr.text}`,
-      `<h1>Hello ${rr.user.firstName}</h1> 
-      <p>This is your recurring reminder to ${rr.text}</p>
-      <p>Your next reminder will be on ${rr.nextDate.toISOString()}</p>`
+      `<h1>Hello ${rr.user.firstName}</h1>
+    <p>This is your recurring reminder to ${rr.text} for your ${rr.item.name}</p>
+    <p>Your next reminder will be on ${rr.nextDate}</p>`
     );
-    await rr.save();
   }
   for (let sr of singleReminder) {
     sr.sent = true;
@@ -55,7 +57,7 @@ agenda.define("query reminders", async (job) => {
       sr.user.username,
       `Your reminder to ${sr.text}`,
       `<h1>Hello ${sr.user.firstName}</h1>
-      <p>This is your reminder to ${sr.text}</p>`
+      <p>This is your reminder to ${sr.text} for your ${sr.item.name}</p>`
     );
     await sr.save();
   }
@@ -67,9 +69,9 @@ agenda.define("query reminders", async (job) => {
 (async function () {
   console.log("starting agenda");
   await agenda.start();
-  const jobs = await agenda.jobs({ name: "query reminders" });
+  const jobs = await agenda.jobs({ name: "check reminders" });
   if (!jobs.length) {
-    await agenda.every("0 */10 * ? * *", "query reminders");
+    await agenda.every("0 * * ? * *", "check reminders");
   }
 })();
 

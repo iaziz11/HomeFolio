@@ -1,49 +1,49 @@
 <% layout('layouts/boilerplate') %>
 
-    <div class="container-fluid">
-        <div class="row text-center">
-            <h1>All Expenses</h1>
-        </div>
-        <div class="row justify-content-center">
-            <canvas id="myChart" data-chartdata="<%= expenseDict %>"></canvas>
-        </div>
+<div class="container-fluid">
+  <div class="row text-center">
+    <h1>All Expenses</h1>
+  </div>
+  <div class="row justify-content-center">
+    <canvas id="myChart" data-chartdata="<%= expenseDict %>"></canvas>
+  </div>
+</div>
 
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0/chartjs-plugin-datalabels.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0/chartjs-plugin-datalabels.min.js"></script>
-
-    <script>
-        const ctx = document.getElementById('myChart');
-        const values = JSON.parse($(ctx).attr('data-chartdata'));
-        console.log(values)
-        let data = {
-            labels: [],
-            datasets: [{
-                label: 'Total Spent',
-                data: [],
-                backgroundColor: [],
-                hoverOffset: 4
-            }]
-        }
-        for (const [key, value] of Object.entries(values)) {
-            data['datasets'][0]['data'].push(value[0]);
-            data['datasets'][0]['backgroundColor'].push(value[1]);
-            data['labels'].push(value[2]);
-        }
-        console.log(data)
-        new Chart(ctx, {
-            type: 'doughnut',
-            data,
-            options: {
-                responsive: false,
-                tooltips: {
-                    callbacks: {
-                        label: (ctx, data) => (`${data.labels[ctx.index]}: $${data.datasets[ctx.datasetIndex].data[ctx.index] / 100}`)
-                    }
-                },
-
-            },
-        })
-    </script>
+<script>
+  const ctx = document.getElementById("myChart");
+  const values = JSON.parse($(ctx).attr("data-chartdata"));
+  let data = {
+    labels: [],
+    datasets: [
+      {
+        label: "Total Spent",
+        data: [],
+        backgroundColor: [],
+        hoverOffset: 4,
+      },
+    ],
+  };
+  for (const [key, value] of Object.entries(values)) {
+    data["datasets"][0]["data"].push(value[0]);
+    data["datasets"][0]["backgroundColor"].push(value[1]);
+    data["labels"].push(value[2]);
+  }
+  new Chart(ctx, {
+    type: "doughnut",
+    data,
+    options: {
+      responsive: false,
+      tooltips: {
+        callbacks: {
+          label: (ctx, data) =>
+            `${data.labels[ctx.index]}: $${
+              data.datasets[ctx.datasetIndex].data[ctx.index] / 100
+            }`,
+        },
+      },
+    },
+  });
+</script>

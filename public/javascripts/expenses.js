@@ -29,6 +29,7 @@ jQuery(function () {
 
   $("#editModal").on("show.bs.modal", function (e) {
     const button = e.relatedTarget;
+    
     $.ajax({
       url:
         "/items/" +
@@ -38,17 +39,11 @@ jQuery(function () {
       method: "GET",
     })
       .done(function (data) {
-        const d = new Date(data.date);
-        const dateTimeLocalValue = new Date(
-          d.getTime() - d.getTimezoneOffset() * 60000
-        )
-          .toISOString()
-          .slice(0, -1);
-        console.log(d);
-        console.log(dateTimeLocalValue);
+        let newDate = new Date(data.date)
+        let editDate = newDate.getFullYear() + "-" + ("0" + (newDate.getMonth() + 1)).slice(-2) + "-" + ("0" + newDate.getDate()).slice(-2) + "T" + ("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2);
         $("#modalEditForm #editExpenseName").val(data.name);
         $("#modalEditForm #editExpenseValue").val(data.value / 100);
-        $("#modalEditForm #editDate").val(dateTimeLocalValue);
+        $("#modalEditForm #editDate").val(editDate);
         $(".submit-edit-form").attr(
           "data-itemid",
           $(button).attr("data-bs-itemid")

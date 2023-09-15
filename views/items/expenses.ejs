@@ -1,4 +1,21 @@
 <% layout('layouts/boilerplate') %>
+<% const militaryToStandardTime = (time) => {
+  time = time.split(":"); let hours = Number(time[0]);
+  let minutes = Number(time[1]);
+  let timeValue;
+  if (hours > 0 && hours <= 12) { 
+    timeValue = "" + hours;
+  } else if (hours > 12) { 
+    timeValue = "" + (hours - 12); 
+  } else if (hours == 0) {
+    timeValue = "12"; 
+  } 
+  timeValue += minutes < 10 ? ":0" + minutes : ":" + minutes;
+  timeValue += hours >= 12 ? " P.M." : " A.M.";
+  return timeValue; 
+  }
+%>
+
 
 <div class="container">
   <div class="row text-center">
@@ -21,7 +38,10 @@
           <% for (let e of expenses) {%>
           <tr class="tr-hover">
             <td class="align-middle"><%= e.name %></td>
-            <td class="align-middle"><%= e.date %></td>
+            <td class="align-middle">
+              <% let newDate = new Date(e.date) %>
+              <%= (newDate.getMonth() + 1) + "/" + newDate.getDate() + "/" + newDate.getFullYear() + " @ " + militaryToStandardTime(`${newDate.getHours()}:${newDate.getMinutes()}`)%>
+            </td>
             <td class="align-middle">
               <% if (e.file) {%>
               <a href="<%= e.file.url %>" target="_blank">View File</a>
@@ -29,20 +49,10 @@
             </td>
             <td class="align-middle">$<%= (e.value/100).toFixed(2) %></td>
             <td class="align-middle">
-              <button
-                class="btn btn-primary btn-sm"
-                data-bs-toggle="modal"
-                data-bs-target="#editModal"
-                data-bs-id="<%= e._id %>"
-                data-bs-itemid="<%= itemId %>"
-              >
+              <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-id="<%= e._id %>" data-bs-itemid="<%= itemId %>">
                 <i class="bi bi-pencil-square"></i>
               </button>
-              <button
-                class="btn btn-danger btn-sm delete-button"
-                data-id="<%= e._id %>"
-                data-itemid="<%= itemId %>"
-              >
+              <button class="btn btn-danger btn-sm delete-button" data-id="<%= e._id %>" data-itemid="<%= itemId %>">
                 <i class="bi bi-trash-fill"></i>
               </button>
             </td>
@@ -59,11 +69,7 @@
         </tfoot>
       </table>
       <div class="mb-3">
-        <button
-          class="btn btn-primary"
-          data-bs-toggle="modal"
-          data-bs-target="#newModal"
-        >
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newModal">
           + Add New Expense
         </button>
       </div>
@@ -72,61 +78,29 @@
 </div>
 
 <!-- New Modal -->
-<div
-  class="modal fade"
-  id="newModal"
-  tabindex="-1"
-  aria-labelledby="newModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="newModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="newModalLabel">New Expense</h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form id="modalNewForm" class="needs-validation" novalidate>
           <div class="mb-3">
             <label for="newExpenseName" class="form-label">Expense Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="newExpenseName"
-              name="expense[name]"
-              maxlength="20"
-              required
-            />
+            <input type="text" class="form-control" id="newExpenseName" name="expense[name]" maxlength="20" required />
             <div class="invalid-feedback">Please enter a name.</div>
           </div>
           <label for="newExpenseValue" class="form-label">Value</label>
           <div class="input-group mb-3">
             <span class="input-group-text">$</span>
-            <input
-              type="number"
-              step="0.01"
-              min="0.01"
-              class="form-control"
-              aria-label="Amount"
-              name="expense[value]"
-              id="newExpenseValue"
-              required
-            />
+            <input type="number" step="0.01" min="0.01" class="form-control" aria-label="Amount" name="expense[value]" id="newExpenseValue" required />
             <div class="invalid-feedback">Please enter a valid value.</div>
           </div>
           <div class="mb-3">
             <label for="newDate" class="form-label">Date</label><br />
-            <input
-              type="datetime-local"
-              name="expense[date]"
-              id="newDate"
-              required
-            />
+            <input type="datetime-local" name="expense[date]" id="newDate" required />
             <div class="invalid-feedback">Please enter a valid date.</div>
           </div>
         </form>
@@ -135,17 +109,10 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
           Close
         </button>
-        <button
-          type="button"
-          class="btn btn-primary submit-new-form"
-          id="<%= itemId %>"
-        >
+        <button type="button" class="btn btn-primary submit-new-form" id="<%= itemId %>">
           <span id="newExpenseText">Add Expense</span>
           <div id="newSpinner">
-            <span
-              class="spinner-border spinner-border-sm"
-              aria-hidden="true"
-            ></span>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
             <span role="status">Saving...</span>
           </div>
         </button>
@@ -155,61 +122,29 @@
 </div>
 
 <!-- Edit Modal -->
-<div
-  class="modal fade"
-  id="editModal"
-  tabindex="-1"
-  aria-labelledby="editModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="editModalLabel">Edit Expense</h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form id="modalEditForm" class="needs-validation" novalidate>
           <div class="mb-3">
             <label for="editExpenseName" class="form-label">Expense Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="editExpenseName"
-              name="expense[name]"
-              maxlength="20"
-              required
-            />
+            <input type="text" class="form-control" id="editExpenseName" name="expense[name]" maxlength="20" required />
             <div class="invalid-feedback">Please enter a valid name.</div>
           </div>
           <label for="editExpenseValue" class="form-label">Value</label>
           <div class="input-group mb-3">
             <span class="input-group-text">$</span>
-            <input
-              type="number"
-              step="0.01"
-              min="0.01"
-              class="form-control"
-              aria-label="Amount"
-              name="expense[value]"
-              id="editExpenseValue"
-              required
-            />
+            <input type="number" step="0.01" min="0.01" class="form-control" aria-label="Amount" name="expense[value]" id="editExpenseValue" required />
             <div class="invalid-feedback">Please enter a valid value.</div>
           </div>
           <div class="mb-3">
             <label for="editDate" class="form-label">Date</label><br />
-            <input
-              type="datetime-local"
-              name="expense[date]"
-              id="editDate"
-              required
-            />
+            <input type="datetime-local" name="expense[date]" id="editDate" required />
             <div class="invalid-feedback">Please enter a valid date.</div>
           </div>
         </form>
@@ -218,18 +153,10 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
           Close
         </button>
-        <button
-          type="button"
-          class="btn btn-primary submit-edit-form"
-          data-itemid=""
-          data-id=""
-        >
+        <button type="button" class="btn btn-primary submit-edit-form" data-itemid="" data-id="">
           <span id="editExpenseText">Save Changes</span>
           <div id="editSpinner">
-            <span
-              class="spinner-border spinner-border-sm"
-              aria-hidden="true"
-            ></span>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
             <span role="status">Saving...</span>
           </div>
         </button>

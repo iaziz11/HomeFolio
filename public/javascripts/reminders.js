@@ -1,4 +1,5 @@
 jQuery(function () {
+
   $("#modalNewForm #newCheck").on("change", function () {
     if ($("#modalNewForm #newCheck").is(":checked")) {
       $("#newRemindText").text("Remind Me Starting:");
@@ -86,14 +87,9 @@ jQuery(function () {
       method: "GET",
     })
       .done(function (data) {
-        const d = new Date(data.nextDate);
-        console.log(d);
-        const dateTimeLocalValue = new Date(
-          d.getTime() - d.getTimezoneOffset() * 60000
-        )
-          .toISOString()
-          .slice(0, -1);
-        console.log(dateTimeLocalValue);
+        let newDate = new Date(data.nextDate)
+        let editDate = newDate.getFullYear() + "-" + ("0" + (newDate.getMonth() + 1)).slice(-2) + "-" + ("0" + newDate.getDate()).slice(-2) + "T" + ("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2);
+        console.log(newDate)
         let everyPeriod = 0;
         for (let [i, v] of data.every.entries()) {
           if (v > 0) {
@@ -105,7 +101,7 @@ jQuery(function () {
         $("#modalEditForm #editCheck")
           .prop("checked", data.recurring)
           .trigger("change");
-        $("#modalEditForm #editNextDate").val(dateTimeLocalValue);
+        $("#modalEditForm #editNextDate").val(editDate);
         $(
           `#modalEditForm #editEvery option[value='${data.every.join(" ")}']`
         ).attr("selected", "true");

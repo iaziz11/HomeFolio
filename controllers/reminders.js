@@ -23,46 +23,26 @@ function setEveryPeriod(oldEvery, period) {
 module.exports.getReminders = async (req, res, next) => {
   const { itemId } = req.params;
   res.locals.itemId = itemId;
-  try {
-    const currentItem = await Item.findById(itemId);
+  const currentItem = await Item.findById(itemId);
 
-    const reminders = await Reminder.find({
-      _id: { $in: currentItem.reminders },
-    });
-    const newReminders = reminders.map((e) => {
-      let oldDate = new Date(e.nextDate);
-      let newDate =
-        oldDate.getMonth() +
-        1 +
-        "/" +
-        oldDate.getDate() +
-        "/" +
-        oldDate.getFullYear() +
-        " @ " +
-        militaryToStandardTime(oldDate.toTimeString());
-      return {
-        ...e.toObject(),
-        nextDate: newDate,
-      };
-    });
-    res.render("items/reminders", {
-      reminders: newReminders,
-      currentItem: currentItem.name,
-    });
-  } catch (e) {
-    return next(e);
-  }
+  const reminders = await Reminder.find({
+    _id: { $in: currentItem.reminders },
+  });
+  res.render("items/reminders", {
+    reminders,
+    currentItem: currentItem.name,
+  });
 };
 
 module.exports.getReminder = async (req, res) => {
   const { id } = req.params;
   const reminder = await Reminder.findById(id);
-  console.log(reminder);
   res.send(reminder);
 };
 
 module.exports.addReminder = async (req, res) => {
   const { itemId } = req.params;
+  req.body.reminder.nextDate = new Date(req.body.reminder.nextDate);
   let oldEvery = req.body.reminder.every;
   req.body.reminder.every = req.body.reminder.every
     .replace("1", req.body.reminder.everyPeriod)

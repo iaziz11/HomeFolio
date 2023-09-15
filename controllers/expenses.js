@@ -10,31 +10,14 @@ module.exports.getExpenses = async (req, res) => {
     _id: { $in: currentItem.expenses },
   }).populate("file");
   let total = expenses.reduce((r, e) => r + e.value, 0);
-  const newExpenses = expenses.map((e) => {
-    let oldDate = new Date(e.date);
-    let newDate =
-      oldDate.getMonth() +
-      1 +
-      "/" +
-      oldDate.getDate() +
-      "/" +
-      oldDate.getFullYear() +
-      " @ " +
-      militaryToStandardTime(oldDate.toTimeString());
-    return {
-      ...e.toObject(),
-      date: newDate,
-    };
-  });
   res.render("items/expenses", {
-    expenses: newExpenses,
+    expenses,
     total,
     currentItem: currentItem.name,
   });
 };
 
 module.exports.getAllExpenses = async (req, res) => {
-  console.log(req.user._id);
   let expenseDict = {};
   const userItems = await Item.find({ user: req.user._id });
   const userItemsIds = userItems.map((e) => e._id);
@@ -43,15 +26,12 @@ module.exports.getAllExpenses = async (req, res) => {
   );
 
   expenses.map((e) => {
-    console.log(e.item);
     if (!(e.item._id in expenseDict)) {
-      console.log("first");
       expenseDict[e.item._id] = [e.value, e.item.color, e.item.name];
     } else {
       expenseDict[e.item._id][0] += e.value;
     }
   });
-  console.log(expenseDict);
   res.render("allexpenses", { expenseDict: JSON.stringify(expenseDict) });
 };
 
@@ -63,6 +43,7 @@ module.exports.getExpense = async (req, res) => {
 
 module.exports.addExpense = async (req, res) => {
   const { itemId } = req.params;
+  req.body.expense.date = new Date(req.body.expense.date);
   req.body.expense.value = Math.round(req.body.expense.value * 100);
   const expense = new Expense(req.body.expense);
   const currentItem = await Item.findById(itemId);

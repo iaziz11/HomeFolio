@@ -23,7 +23,6 @@ module.exports.registerUser = async (req, res, next) => {
 module.exports.logoutUser = (req, res, next) => {
   req.logout((err) => {
     if (err) {
-      console.log(err);
       return next(err);
     }
     res.redirect("/login");
@@ -64,9 +63,7 @@ module.exports.sendResetPasswordRequest = async (req, res, next) => {
 
 module.exports.displayResetPassword = async (req, res) => {
   const requestId = req.params.id;
-  console.log(requestId);
   const foundRequest = await PasswordResetRequest.findById(requestId);
-  console.log(foundRequest);
   if (!foundRequest) {
     req.flash("error", "Request not found");
     return res.redirect("/login");
@@ -77,12 +74,8 @@ module.exports.displayResetPassword = async (req, res) => {
 module.exports.resetPassword = async (req, res) => {
   const requestId = req.params.id;
   const newPassword = req.body.password;
-  console.log(requestId);
-  console.log(newPassword);
   const foundRequest = await PasswordResetRequest.findById(requestId);
-  console.log(foundRequest);
   const user = await User.findByUsername(foundRequest.username);
-  console.log(user);
   await user.setPassword(newPassword);
   await user.save();
   await PasswordResetRequest.findByIdAndDelete(foundRequest._id);
