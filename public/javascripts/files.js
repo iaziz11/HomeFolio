@@ -1,4 +1,10 @@
 jQuery(function () {
+  $("#formFile").on("change", function () {
+    $("#formControlInput").val(
+      $("#formFile").val().split("\\").pop().split(".")[0]
+    );
+  });
+
   $(".submit-new-form").on("click", function () {
     $("#modalNewForm").addClass("was-validated");
     if (!document.querySelector("#modalNewForm").checkValidity()) {
