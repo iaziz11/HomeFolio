@@ -15,17 +15,16 @@
           $("#confirm-password").addClass("is-invalid");
           event.preventDefault();
           event.stopPropagation();
+          form.classList.add("was-validated");
           return;
         }
-
         if (!form.checkValidity()) {
           $(".form-text").hide();
           $("#confirm-password-feedback").text("");
           event.preventDefault();
           event.stopPropagation();
+          form.classList.add("was-validated");
         }
-
-        form.classList.add("was-validated");
       },
       false
     );

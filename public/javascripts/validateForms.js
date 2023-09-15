@@ -13,9 +13,8 @@
           $(".form-text").hide();
           event.preventDefault();
           event.stopPropagation();
+          form.classList.add("was-validated");
         }
-
-        form.classList.add("was-validated");
       },
       false
     );

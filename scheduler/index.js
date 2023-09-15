@@ -1,8 +1,8 @@
 const Agenda = require("agenda");
-const nodemailer = require("nodemailer");
 const Reminder = require("../models/reminder");
 const mongoConnectionString = process.env.DB_URL;
 const agenda = new Agenda({ db: { address: mongoConnectionString } });
+const { sendEmail } = require("../utils");
 
 // [year, month, week, day, hour, minute]
 // will be multiplied by reminder.every, then reduced to get sum
@@ -16,27 +16,6 @@ const timeArray = [
   1000 * 60 * 60,
   1000 * 60,
 ];
-
-const sendEmail = async (to, subject, body) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-  // send mail with defined transport object
-  const info = await transporter.sendMail({
-    from: "HomeFolio", // sender address
-    to, // list of receivers
-    subject, // Subject line
-    html: body, // html body
-  });
-
-  console.log("Message sent: %s", info.messageId);
-};
 
 agenda.define("query reminders", async (job) => {
   const recurringReminders = await Reminder.find({

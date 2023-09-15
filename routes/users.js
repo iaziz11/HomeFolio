@@ -12,6 +12,14 @@ router.get("/", (req, res) => {
 router.get("/login", (req, res) => {
   res.render("users/login");
 });
+router.get("/resetPassword", (req, res) => {
+  res.render("users/resetPassword");
+});
+
+router.get("/resetPassword/:id", wrapAsync(users.displayResetPassword));
+router.post("/resetPassword/:id", wrapAsync(users.resetPassword));
+
+router.post("/resetPassword", wrapAsync(users.sendResetPasswordRequest));
 router.post(
   "/login",
   passport.authenticate("local", {
