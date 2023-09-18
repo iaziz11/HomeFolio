@@ -14,12 +14,12 @@
         />
       </a>
       <div class="item-row item-row-primary">
-        <span class="text-span"> Add New Item </span>
+        <span class="text-span"> Add New Folio </span>
       </div>
     </div>
     <% for (let i of items) {%>
     <div class="item-tile" data-color="<%= i.color %>">
-      <a href="items/<%= i._id %>/reminders">
+      <a href="/folios/<%= i._id %>/reminders">
         <img class="item-icon <%= i.img ? "icon-shadow" : "" %>" src="<%= i.icon
         || "/images/no-image.png" %>" alt="icon" />
       </a>
@@ -53,7 +53,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="editModalLabel">Edit Item</h1>
+        <h1 class="modal-title fs-5" id="editModalLabel">Edit Folio</h1>
         <button
           type="button"
           class="btn-close"
@@ -70,7 +70,7 @@
         >
           <div class="mb-3">
             <label for="formFile" class="form-label"
-              >Upload a New Image of Your Item</label
+              >Upload a New Image for Your Folio</label
             >
             <input
               class="form-control"
@@ -81,7 +81,7 @@
           </div>
           <div class="mb-3">
             <label for="formControlInput" class="form-label"
-              >Change Item Name</label
+              >Change Folio Name</label
             >
             <input
               type="text"
@@ -94,7 +94,7 @@
             <div class="invalid-feedback">Please enter a name.</div>
           </div>
           <label for="colorInput" class="form-label"
-            >Pick a New Color for Your Item</label
+            >Pick a New Color for Your Folio</label
           >
           <input
             type="color"
@@ -136,7 +136,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="newModalLabel">New Item</h1>
+        <h1 class="modal-title fs-5" id="newModalLabel">New Folio</h1>
         <button
           type="button"
           class="btn-close"
@@ -153,7 +153,7 @@
         >
           <div class="mb-3">
             <label for="formFile" class="form-label"
-              >Upload an Image of Your Item</label
+              >Upload an Image for Your Folio</label
             >
             <input
               class="form-control"
@@ -163,7 +163,7 @@
             />
           </div>
           <div class="mb-3">
-            <label for="formControlInput" class="form-label">Item Name</label>
+            <label for="formControlInput" class="form-label">Folio Name</label>
             <input
               type="text"
               class="form-control"
@@ -175,7 +175,7 @@
             <div class="invalid-feedback">Please enter a name.</div>
           </div>
           <label for="colorInput" class="form-label"
-            >Pick a Color for Your Item</label
+            >Pick a Color for Your Folio</label
           >
           <input
             type="color"
@@ -192,7 +192,7 @@
           Close
         </button>
         <button type="button" class="btn btn-primary submit-new-form" id="">
-          <span id="newItemText">Add Item</span>
+          <span id="newItemText">Add Folio</span>
           <div id="newSpinner">
             <span
               class="spinner-border spinner-border-sm"

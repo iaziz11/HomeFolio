@@ -93,10 +93,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // routes
 app.use("/", usersRouter);
-app.use("/items", itemsRouter);
-app.use("/items/:itemId/reminders", remindersRouter);
-app.use("/items/:itemId/expenses", expensesRouter);
-app.use("/items/:itemId/files", filesRouter);
+app.use("/folios", itemsRouter);
+app.use("/folios/:itemId/reminders", remindersRouter);
+app.use("/folios/:itemId/expenses", expensesRouter);
+app.use("/folios/:itemId/files", filesRouter);
 app.get("/allexpenses", expenses.getAllExpenses);
 
 // catch 404 and forward to error handler

@@ -13,7 +13,7 @@ jQuery(function () {
     $("#newFileText").css("display", "none");
     $("#newSpinner").css("display", "block");
     $.ajax({
-      url: "/items/" + this.id + "/files",
+      url: "/folios/" + this.id + "/files",
       method: "POST",
       data: new FormData(document.querySelector("#modalNewForm")),
       processData: false,
@@ -37,7 +37,7 @@ jQuery(function () {
 
   $(".delete-button").on("click", function () {
     $.ajax({
-      url: "/items/" + $(this).attr("data-itemid") + "/files/" + this.id,
+      url: "/folios/" + $(this).attr("data-itemid") + "/files/" + this.id,
       type: "DELETE",
     })
       .done(function () {

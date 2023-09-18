@@ -2,7 +2,7 @@ $("button.delete-button").each(function () {
   let button = this;
   button.addEventListener("click", function () {
     $.ajax({
-      url: "/items/" + button.id,
+      url: "/folios/" + button.id,
       type: "DELETE",
     })
       .done(function () {
@@ -51,7 +51,7 @@ $(".submit-edit-form").on("click", function () {
   $("#editItemText").css("display", "none");
   $("#editSpinner").css("display", "block");
   $.ajax({
-    url: "/items/" + this.id,
+    url: "/folios/" + this.id,
     method: "PUT",
     data: new FormData(document.querySelector("#modalEditForm")),
     processData: false,
@@ -81,7 +81,7 @@ $(".submit-new-form").on("click", function () {
   $("#newItemText").css("display", "none");
   $("#newSpinner").css("display", "block");
   $.ajax({
-    url: "/items",
+    url: "/folios",
     method: "POST",
     data: new FormData(document.querySelector("#modalNewForm")),
     processData: false,

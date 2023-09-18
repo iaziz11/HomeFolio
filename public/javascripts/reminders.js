@@ -1,5 +1,4 @@
 jQuery(function () {
-
   $("#modalNewForm #newCheck").on("change", function () {
     if ($("#modalNewForm #newCheck").is(":checked")) {
       $("#newRemindText").text("Remind Me Starting:");
@@ -32,7 +31,7 @@ jQuery(function () {
     $("#newReminderText").css("display", "none");
     $("#newSpinner").css("display", "block");
     $.ajax({
-      url: "/items/" + this.id + "/reminders",
+      url: "/folios/" + this.id + "/reminders",
       method: "POST",
       data: $("#modalNewForm").serialize(),
     })
@@ -55,7 +54,7 @@ jQuery(function () {
   $("table .form-check-input").on("change", function () {
     let sendData = this.name + "=" + this.checked;
     let url =
-      "/items/" +
+      "/folios/" +
       $(this).attr("data-itemid") +
       "/reminders/" +
       $(this).attr("data-id") +
@@ -80,16 +79,25 @@ jQuery(function () {
     const button = e.relatedTarget;
     $.ajax({
       url:
-        "/items/" +
+        "/folios/" +
         button.getAttribute("data-bs-itemid") +
         "/reminders/" +
         button.getAttribute("data-bs-id"),
       method: "GET",
     })
       .done(function (data) {
-        let newDate = new Date(data.nextDate)
-        let editDate = newDate.getFullYear() + "-" + ("0" + (newDate.getMonth() + 1)).slice(-2) + "-" + ("0" + newDate.getDate()).slice(-2) + "T" + ("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2);
-        console.log(newDate)
+        let newDate = new Date(data.nextDate);
+        let editDate =
+          newDate.getFullYear() +
+          "-" +
+          ("0" + (newDate.getMonth() + 1)).slice(-2) +
+          "-" +
+          ("0" + newDate.getDate()).slice(-2) +
+          "T" +
+          ("0" + newDate.getHours()).slice(-2) +
+          ":" +
+          ("0" + newDate.getMinutes()).slice(-2);
+        console.log(newDate);
         let everyPeriod = 0;
         for (let [i, v] of data.every.entries()) {
           if (v > 0) {
@@ -141,7 +149,7 @@ jQuery(function () {
     let itemId = $(this).attr("data-itemid");
     let id = $(this).attr("data-id");
     $.ajax({
-      url: "/items/" + itemId + "/reminders/" + id,
+      url: "/folios/" + itemId + "/reminders/" + id,
       method: "PUT",
       data: $("#modalEditForm").serialize(),
     })
@@ -164,9 +172,8 @@ jQuery(function () {
   $(".delete-button").on("click", function () {
     let id = $(this).attr("data-id");
     let itemId = $(this).attr("data-itemid");
-    console.log("/items/" + itemId + "/reminders/" + id);
     $.ajax({
-      url: "/items/" + itemId + "/reminders/" + id,
+      url: "/folios/" + itemId + "/reminders/" + id,
       type: "DELETE",
     })
       .done(function () {

@@ -7,7 +7,7 @@ jQuery(function () {
     $("#newExpenseText").css("display", "none");
     $("#newSpinner").css("display", "block");
     $.ajax({
-      url: "/items/" + this.id + "/expenses",
+      url: "/folios/" + this.id + "/expenses",
       method: "POST",
       data: $("#modalNewForm").serialize(),
     })
@@ -29,18 +29,27 @@ jQuery(function () {
 
   $("#editModal").on("show.bs.modal", function (e) {
     const button = e.relatedTarget;
-    
+
     $.ajax({
       url:
-        "/items/" +
+        "/folios/" +
         button.getAttribute("data-bs-itemid") +
         "/expenses/" +
         button.getAttribute("data-bs-id"),
       method: "GET",
     })
       .done(function (data) {
-        let newDate = new Date(data.date)
-        let editDate = newDate.getFullYear() + "-" + ("0" + (newDate.getMonth() + 1)).slice(-2) + "-" + ("0" + newDate.getDate()).slice(-2) + "T" + ("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2);
+        let newDate = new Date(data.date);
+        let editDate =
+          newDate.getFullYear() +
+          "-" +
+          ("0" + (newDate.getMonth() + 1)).slice(-2) +
+          "-" +
+          ("0" + newDate.getDate()).slice(-2) +
+          "T" +
+          ("0" + newDate.getHours()).slice(-2) +
+          ":" +
+          ("0" + newDate.getMinutes()).slice(-2);
         $("#modalEditForm #editExpenseName").val(data.name);
         $("#modalEditForm #editExpenseValue").val(data.value / 100);
         $("#modalEditForm #editDate").val(editDate);
@@ -77,7 +86,7 @@ jQuery(function () {
     let itemId = $(this).attr("data-itemid");
     let id = $(this).attr("data-id");
     $.ajax({
-      url: "/items/" + itemId + "/expenses/" + id,
+      url: "/folios/" + itemId + "/expenses/" + id,
       method: "PUT",
       data: $("#modalEditForm").serialize(),
     })
@@ -101,7 +110,7 @@ jQuery(function () {
     let id = $(this).attr("data-id");
     let itemId = $(this).attr("data-itemid");
     $.ajax({
-      url: "/items/" + itemId + "/expenses/" + id,
+      url: "/folios/" + itemId + "/expenses/" + id,
       type: "DELETE",
     })
       .done(function () {

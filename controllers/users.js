@@ -16,7 +16,7 @@ module.exports.registerUser = async (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect("/items");
+    res.redirect("/folios");
   });
 };
 
