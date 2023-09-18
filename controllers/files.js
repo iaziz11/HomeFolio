@@ -47,7 +47,6 @@ const convertTime = (time) => {
 module.exports.getFiles = async (req, res) => {
   const { itemId } = req.params;
   res.locals.itemId = itemId;
-  const now = new Date();
   const currentItem = await Item.findById(itemId);
   const files = await File.find({ _id: { $in: currentItem.files } });
   res.render("items/files", { files, currentItem: currentItem.name });

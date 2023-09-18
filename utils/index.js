@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const Item = require("../models/item");
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -12,6 +13,16 @@ module.exports.isNotLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     console.log("You cannot be logged in!");
     return res.redirect("/folios");
+  }
+  next();
+};
+
+module.exports.hasPermission = async (req, res, next) => {
+  const currentItem = await Item.findById(req.params.itemId).populate("user");
+  console.log(currentItem.user._id);
+  console.log(req.user._id);
+  if (!currentItem.user._id.equals(req.user._id)) {
+    return next("You do not have permissions to do that");
   }
   next();
 };

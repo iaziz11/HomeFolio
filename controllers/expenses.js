@@ -1,6 +1,5 @@
 const Expense = require("../models/expense");
 const Item = require("../models/item");
-const { militaryToStandardTime } = require("../utils");
 
 module.exports.getExpenses = async (req, res) => {
   const { itemId } = req.params;

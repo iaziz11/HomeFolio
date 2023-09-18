@@ -7,8 +7,8 @@ module.exports.getItems = async (req, res) => {
 };
 
 module.exports.getItem = async (req, res) => {
-  const { id } = req.params;
-  const item = await Item.findById(id);
+  const { itemId } = req.params;
+  const item = await Item.findById(itemId);
   res.send(item);
 };
 
@@ -24,12 +24,12 @@ module.exports.addItem = async (req, res) => {
 };
 
 module.exports.editItem = async (req, res) => {
-  const { id } = req.params;
+  const { itemId } = req.params;
   const newItem = req.body.item;
   if (req.file) {
     newItem.icon = req.file.path;
   }
-  const item = await Item.findByIdAndUpdate(id, newItem, {
+  const item = await Item.findByIdAndUpdate(itemId, newItem, {
     new: true,
     runValidators: true,
   });
@@ -38,8 +38,8 @@ module.exports.editItem = async (req, res) => {
 };
 
 module.exports.deleteItem = async (req, res) => {
-  const { id } = req.params;
-  await Item.findByIdAndDelete(id);
+  const { itemId } = req.params;
+  await Item.findByIdAndDelete(itemId);
   req.flash("success", "Successfully deleted item!");
   res.send("Deleted");
 };
