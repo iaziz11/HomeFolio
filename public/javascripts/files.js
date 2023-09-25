@@ -35,11 +35,27 @@ jQuery(function () {
       });
   });
 
-  $(".delete-button").on("click", function () {
+  $("#deleteModal").on("show.bs.modal", function (e) {
+    const button = e.relatedTarget;
+    let id = button.getAttribute("data-id");
+    let itemId = button.getAttribute("data-itemid");
+    $(".delete-button").attr("data-itemid", itemId);
+    $(".delete-button").attr("data-id", id);
+  });
+
+  $(".delete-button").on("click", function (e) {
+    let id = $(".delete-button").attr("data-id");
+    let itemId = $(".delete-button").attr("data-itemid");
+    $("#deleteReminderText").css("display", "none");
+    $("#deleteSpinner").css("display", "block");
     $.ajax({
-      url: "/folios/" + $(this).attr("data-itemid") + "/files/" + this.id,
+      url: "/folios/" + itemId + "/files/" + id,
       type: "DELETE",
     })
+      .always(function () {
+        $("#deleteReminderText").css("display", "inline");
+        $("#deleteSpinner").css("display", "none");
+      })
       .done(function () {
         console.log("Deleted successfully!");
         window.location.reload();

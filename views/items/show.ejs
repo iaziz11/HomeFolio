@@ -33,7 +33,12 @@
           <i class="bi bi-pencil-square"></i>
         </button>
         <span class="text-span"> <%= i.name %> </span>
-        <button class="btn btn-danger btn-sm delete-button" id="<%= i._id %>">
+        <button
+          class="btn btn-danger btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteModal"
+          data-itemid="<%= i._id %>"
+        >
           <i class="bi bi-trash-fill"></i>
         </button>
       </div>
@@ -201,6 +206,53 @@
               aria-hidden="true"
             ></span>
             <span role="status">Saving...</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteModalLabel">Delete Folio</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you would like to delete this Folio?
+        <div class="red-text">This action is irreversible.</div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger delete-button"
+          data-itemid=""
+        >
+          <span id="deleteReminderText">Delete</span>
+          <div id="deleteSpinner">
+            <span
+              class="spinner-border spinner-border-sm"
+              aria-hidden="true"
+            ></span>
+            <span role="status">Deleting...</span>
           </div>
         </button>
       </div>

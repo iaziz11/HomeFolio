@@ -200,6 +200,10 @@ footer {
   display: none;
 }
 
+#deleteSpinner {
+  display: none;
+}
+
 #newEveryContainer {
   display: none;
 }
@@ -263,6 +267,10 @@ table {
   color: #87989b;
 }
 
+.red-text {
+  color: red;
+}
+
 @media (max-width: 1000px) {
   body {
     background-image: none !important;
@@ -294,5 +302,9 @@ table {
 
   .splash p {
     font-size: 25px;
+  }
+
+  #myChart {
+    height: 40vh;
   }
 }

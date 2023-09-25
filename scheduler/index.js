@@ -32,16 +32,27 @@ agenda.define("check reminders", async (job) => {
   })
     .populate("user")
     .populate("item");
-  console.log(new Date().toISOString());
-  console.log(recurringReminders);
-  console.log(singleReminder);
   for (let rr of recurringReminders) {
-    rr.nextDate = new Date(
-      rr.nextDate.getTime() +
-        rr.every.reduce(function (r, a, i) {
-          return r + a * timeArray[i];
-        }, 0)
-    ).toISOString();
+    if (rr.every[1] > 0) {
+      let addMonths = rr.nextDate.getMonth() + rr.every[1];
+      let newMonth = addMonths % 12;
+      let addYears = Math.floor(addMonths / 12);
+      rr.nextDate = new Date(rr.nextDate).setFullYear(
+        rr.nextDate.getFullYear() + addYears,
+        newMonth
+      );
+    } else if (rr.every[0] > 0) {
+      rr.nextDate = new Date(rr.nextDate).setFullYear(
+        rr.nextDate.getFullYear() + rr.every[0]
+      );
+    } else {
+      rr.nextDate = new Date(
+        rr.nextDate.getTime() +
+          rr.every.reduce(function (r, a, i) {
+            return r + a * timeArray[i];
+          }, 0)
+      ).toISOString();
+    }
     await rr.save();
     await sendEmail(
       rr.user.username,

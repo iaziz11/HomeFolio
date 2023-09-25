@@ -169,13 +169,27 @@ jQuery(function () {
       });
   });
 
-  $(".delete-button").on("click", function () {
-    let id = $(this).attr("data-id");
-    let itemId = $(this).attr("data-itemid");
+  $("#deleteModal").on("show.bs.modal", function (e) {
+    const button = e.relatedTarget;
+    let id = button.getAttribute("data-id");
+    let itemId = button.getAttribute("data-itemid");
+    $(".delete-button").attr("data-itemid", itemId);
+    $(".delete-button").attr("data-id", id);
+  });
+
+  $(".delete-button").on("click", function (e) {
+    let id = $(".delete-button").attr("data-id");
+    let itemId = $(".delete-button").attr("data-itemid");
+    $("#deleteReminderText").css("display", "none");
+    $("#deleteSpinner").css("display", "block");
     $.ajax({
       url: "/folios/" + itemId + "/reminders/" + id,
       type: "DELETE",
     })
+      .always(function () {
+        $("#deleteReminderText").css("display", "inline");
+        $("#deleteSpinner").css("display", "none");
+      })
       .done(function () {
         console.log("Deleted successfully!");
         window.location.reload();
