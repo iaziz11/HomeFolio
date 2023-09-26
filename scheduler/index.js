@@ -1,5 +1,6 @@
 const Agenda = require("agenda");
 const Reminder = require("../models/reminder");
+const ResetRequest = require("../models/passwordResetRequest");
 const mongoConnectionString = process.env.DB_URL;
 const agenda = new Agenda({ db: { address: mongoConnectionString } });
 const { sendEmail } = require("../utils");
@@ -16,6 +17,15 @@ const timeArray = [
   1000 * 60 * 60,
   1000 * 60,
 ];
+
+agenda.define("check expired reset requests", async (job) => {
+  const expiredRequests = await ResetRequest.find({
+    expires: { $lte: new Date() },
+  });
+  for (let i of expiredRequests) {
+    await ResetRequest.findByIdAndDelete(i._id);
+  }
+});
 
 agenda.define("check reminders", async (job) => {
   const recurringReminders = await Reminder.find({
@@ -80,10 +90,10 @@ agenda.define("check reminders", async (job) => {
 (async function () {
   console.log("starting agenda");
   await agenda.start();
-  const jobs = await agenda.jobs({ name: "check reminders" });
-  if (!jobs.length) {
-    await agenda.every("0 * * ? * *", "check reminders");
-  }
+  await agenda.every("0 * * ? * *", [
+    "check reminders",
+    "check expired reset requests",
+  ]);
 })();
 
 //add () when calling

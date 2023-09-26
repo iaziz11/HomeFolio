@@ -45,14 +45,13 @@ module.exports.sendResetPasswordRequest = async (req, res, next) => {
   }
   const resetRequest = new PasswordResetRequest({
     username: req.body.username,
-    completed: false,
     expires: Date.now() + 1000 * 60 * 30,
   });
   await resetRequest.save();
   await sendEmail(
     req.body.username,
     "Password Reset Request",
-    `<p>Please click the link below:</p><a href=https://homefolio.up.railway.app/resetPassword/${resetRequest._id}><button>Password Reset</button></a>`
+    `<p>Please click the link below to reset HomeFolio password:</p><a href=https://homefolio.up.railway.app/resetPassword/${resetRequest._id}><button>Password Reset</button></a>`
   );
   req.flash(
     "success",
