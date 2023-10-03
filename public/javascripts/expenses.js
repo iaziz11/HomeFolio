@@ -1,4 +1,21 @@
 jQuery(function () {
+  const militaryToStandardTime = (time) => {
+    time = time.split(":");
+    let hours = Number(time[0]);
+    let minutes = Number(time[1]);
+    let timeValue;
+    if (hours > 0 && hours <= 12) {
+      timeValue = "" + hours;
+    } else if (hours > 12) {
+      timeValue = "" + (hours - 12);
+    } else if (hours == 0) {
+      timeValue = "12";
+    }
+    timeValue += minutes < 10 ? ":0" + minutes : ":" + minutes;
+    timeValue += hours >= 12 ? " P.M." : " A.M.";
+    return timeValue;
+  };
+
   $(".submit-new-form").on("click", function () {
     $("#modalNewForm").addClass("was-validated");
     if (!document.querySelector("#modalNewForm").checkValidity()) {
@@ -130,6 +147,101 @@ jQuery(function () {
       .done(function () {
         console.log("Deleted successfully!");
         window.location.reload();
+      })
+      .fail(function (xhr, status, errorThrown) {
+        alert("Sorry, there was a problem!");
+        console.log("Error: " + errorThrown);
+        console.log("Status: " + status);
+        console.dir(xhr);
+      });
+  });
+
+  $("#dateRange").on("change", function () {
+    let itemId = $("#dateRange").attr("data-itemid");
+    $.ajax({
+      url:
+        "/folios/" +
+        itemId +
+        "/expenses/updateRange?time=" +
+        $("#dateRange").val(),
+      type: "GET",
+    })
+      .done(function ({ expenses, total }) {
+        console.log(expenses);
+        if (!expenses.length) {
+          $("#expenseTable").html(
+            "<thead><tr><th class='text-center'>No expenses to display</th></tr></thead>"
+          );
+        } else {
+          $("#expenseTable").html(
+            `<thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">File</th>
+                    <th scope="col">Expense</th>
+                    <th></th>
+                  </tr>
+                </thead>
+            ${expenses.map((e) => {
+              let newDate = new Date(e.date);
+              return `
+                <tr class="tr-hover">
+                    <td class="align-middle">${e.name}</td>
+                    <td class="align-middle">
+                      ${
+                        newDate.getMonth() +
+                        1 +
+                        "/" +
+                        newDate.getDate() +
+                        "/" +
+                        newDate.getFullYear() +
+                        " @ " +
+                        militaryToStandardTime(
+                          `${newDate.getHours()}:${newDate.getMinutes()}`
+                        )
+                      }
+                    </td>
+                    <td class="align-middle">
+                      ${
+                        e.file
+                          ? `<a href=${e.file.url} target='_blank'>View File</a>`
+                          : ""
+                      }
+                    </td>
+                    <td class="align-middle">$${(e.value / 100).toFixed(2)}</td>
+                    <td class="align-middle">
+                      <button
+                        class="btn btn-primary btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editModal"
+                        data-bs-id="${e._id}"
+                        data-bs-itemid="${itemId}"
+                      >
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                      <button
+                        class="btn btn-danger btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal"
+                        data-id="${e._id}"
+                        data-itemid="${itemId}"
+                      >
+                        <i class="bi bi-trash-fill"></i>
+                      </button>
+                    </td>
+                  </tr>`;
+            })}
+            <tfoot>
+              <tr>
+                <th>Total</th>
+                <td colspan="2"></td>
+                <td>$${(total / 100).toFixed(2)}</td>
+                <td></td>
+              </tr>
+            </tfoot>`
+          );
+        }
       })
       .fail(function (xhr, status, errorThrown) {
         alert("Sorry, there was a problem!");

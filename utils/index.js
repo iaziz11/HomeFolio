@@ -2,8 +2,7 @@ const nodemailer = require("nodemailer");
 const Item = require("../models/item");
 
 module.exports.isLoggedIn = (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    console.log("You are not logged in!");
+  if (!req.isAuthenticated() || req.session.passport === undefined) {
     return res.redirect("/login");
   }
   next();

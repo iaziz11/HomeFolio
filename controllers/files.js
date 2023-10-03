@@ -26,7 +26,7 @@ async function uploadImageMindee(filePath) {
     return response.data.document.inference.prediction;
   } catch (err) {
     console.error(err);
-    process.exit(1);
+    return undefined;
   }
 }
 
@@ -34,7 +34,7 @@ const convertTime = (time) => {
   return (
     time.getFullYear() +
     "-" +
-    ((time.getMonth() > 9 ? "" : "0") + (time.getMonth() + 1)) +
+    ((time.getMonth() > 8 ? "" : "0") + (time.getMonth() + 1)) +
     "-" +
     ((time.getDate() > 9 ? "" : "0") + time.getDate()) +
     "T" +
@@ -73,7 +73,7 @@ module.exports.addFile = async (req, res) => {
     try {
       const mindeeResponse = await uploadImageMindee(req.file.path);
       if (!mindeeResponse.total_amount.value) {
-        throw new Error();
+        throw "Could not parse total";
       }
       const value = Math.round(mindeeResponse.total_amount.value * 100);
       console.log(mindeeResponse);

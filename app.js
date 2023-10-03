@@ -27,6 +27,7 @@ const remindersRouter = require("./routes/reminders");
 const filesRouter = require("./routes/files");
 const expensesRouter = require("./routes/expenses");
 const itemsRouter = require("./routes/items");
+const { isLoggedIn } = require("./utils");
 
 const DbUrl = process.env.DB_URL;
 const secret = process.env.SECRET;
@@ -97,7 +98,7 @@ app.use("/folios", itemsRouter);
 app.use("/folios/:itemId/reminders", remindersRouter);
 app.use("/folios/:itemId/expenses", expensesRouter);
 app.use("/folios/:itemId/files", filesRouter);
-app.get("/allexpenses", expenses.getAllExpenses);
+app.get("/allexpenses", isLoggedIn, expenses.getAllExpenses);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

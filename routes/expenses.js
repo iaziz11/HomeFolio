@@ -15,6 +15,10 @@ router
   );
 
 router
+  .route("/updateRange")
+  .get(isLoggedIn, wrapAsync(expenses.updateExpenseRange));
+
+router
   .route("/:id")
   .get(isLoggedIn, hasPermission, wrapAsync(expenses.getExpense))
   .put(
@@ -24,9 +28,5 @@ router
     wrapAsync(expenses.editExpense)
   )
   .delete(isLoggedIn, hasPermission, expenses.deleteExpense);
-
-router
-  .route("/allexpenses")
-  .get(isLoggedIn, wrapAsync(expenses.getAllExpenses));
 
 module.exports = router;

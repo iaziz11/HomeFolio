@@ -7,12 +7,12 @@ minutes; timeValue += hours >= 12 ? " P.M." : " A.M."; return timeValue; } %>
 
 <div class="container">
   <div class="row text-center">
-    <h1 class="mb-2">Expenses</h1>
+    <h1 class="mb-3">Expenses</h1>
     <h3 class="mb-3 secondary-header"><%= currentItem %></h3>
   </div>
   <div class="row">
     <div class="table-responsive">
-      <table class="table">
+      <table class="table" id="expenseTable">
         <thead>
           <tr>
             <% if (expenses.length) {%>
@@ -75,15 +75,25 @@ minutes; timeValue += hours >= 12 ? " P.M." : " A.M."; return timeValue; } %>
         </tfoot>
         <% } %>
       </table>
-      <div class="mb-3">
-        <button
-          class="btn btn-primary"
-          data-bs-toggle="modal"
-          data-bs-target="#newModal"
-        >
-          + Add New Expense
-        </button>
-      </div>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col">
+      <button
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#newModal"
+      >
+        + Add New Expense
+      </button>
+    </div>
+    <div class="col-4 col-md-2">
+      <select class="form-select" id="dateRange" data-itemid="<%= itemId %>">
+        <option value="all">All Time</option>
+        <option value="year">This Year</option>
+        <option value="month">This Month</option>
+        <option value="week">Past Week</option>
+      </select>
     </div>
   </div>
 </div>
