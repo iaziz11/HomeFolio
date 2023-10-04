@@ -4,22 +4,38 @@
   <div class="row text-center">
     <h1 class="mb-3">All Expenses</h1>
   </div>
-  <% if (expenseDict.length === 2) { %>
-  <div class="table-responsive">
-    <table class="table">
-      <th class="text-center">No expenses to display</th>
-    </table>
+  <div id="mainContent">
+    <% if (expenseDict.length === 2) { %>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="text-center">No expenses to display</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <% } else { %>
+    <div class="row justify-content-center mb-3">
+      <canvas id="myChart" data-chartdata="<%= expenseDict %>"></canvas>
+    </div>
+    <% } %>
   </div>
-  <% } else { %>
   <div class="row justify-content-center">
-    <canvas id="myChart" data-chartdata="<%= expenseDict %>"></canvas>
+    <div class="col-6 col-md-3">
+      <select class="form-select" id="dateRange">
+        <option value="all">All Time</option>
+        <option value="year">This Year</option>
+        <option value="month">This Month</option>
+        <option value="week">Past Week</option>
+      </select>
+    </div>
   </div>
-  <% } %>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0/chartjs-plugin-datalabels.min.js"></script>
-
+<script src="/javascripts/allexpenses.js"></script>
 <script>
   const ctx = document.getElementById("myChart");
   const values = JSON.parse($(ctx).attr("data-chartdata"));

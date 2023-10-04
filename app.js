@@ -22,6 +22,7 @@ const User = require("./models/user.js");
 const nodemailer = require("nodemailer");
 const scheduler = require("./scheduler");
 const expenses = require("./controllers/expenses.js");
+const allExpensesRouter = require("./routes/allexpenses");
 const usersRouter = require("./routes/users");
 const remindersRouter = require("./routes/reminders");
 const filesRouter = require("./routes/files");
@@ -98,7 +99,7 @@ app.use("/folios", itemsRouter);
 app.use("/folios/:itemId/reminders", remindersRouter);
 app.use("/folios/:itemId/expenses", expensesRouter);
 app.use("/folios/:itemId/files", filesRouter);
-app.get("/allexpenses", isLoggedIn, expenses.getAllExpenses);
+app.use("/allexpenses", allExpensesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

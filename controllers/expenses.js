@@ -65,24 +65,6 @@ module.exports.updateExpenseRange = async (req, res) => {
   res.send({ expenses, total });
 };
 
-module.exports.getAllExpenses = async (req, res) => {
-  let expenseDict = {};
-  const userItems = await Item.find({ user: req.user._id });
-  const userItemsIds = userItems.map((e) => e._id);
-  const expenses = await Expense.find({ item: { $in: userItemsIds } }).populate(
-    "item"
-  );
-
-  expenses.map((e) => {
-    if (!(e.item._id in expenseDict)) {
-      expenseDict[e.item._id] = [e.value, e.item.color, e.item.name];
-    } else {
-      expenseDict[e.item._id][0] += e.value;
-    }
-  });
-  res.render("allexpenses", { expenseDict: JSON.stringify(expenseDict) });
-};
-
 module.exports.getExpense = async (req, res) => {
   const { id } = req.params;
   const expense = await Expense.findById(id);
