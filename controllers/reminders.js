@@ -43,6 +43,7 @@ module.exports.getReminder = async (req, res) => {
 module.exports.addReminder = async (req, res) => {
   const { itemId } = req.params;
   oldDate = new Date(req.body.reminder.nextDate);
+  console.log(oldDate);
   newDate = Date.UTC(
     oldDate.getUTCFullYear(),
     oldDate.getUTCMonth(),
