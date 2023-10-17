@@ -62,6 +62,5 @@ module.exports.sendEmail = async (to, subject, body) => {
     subject, // Subject line
     html: body, // html body
   });
-
   console.log("Message sent: %s", info.messageId);
 };

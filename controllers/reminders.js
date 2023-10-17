@@ -42,7 +42,16 @@ module.exports.getReminder = async (req, res) => {
 
 module.exports.addReminder = async (req, res) => {
   const { itemId } = req.params;
-  req.body.reminder.nextDate = new Date(req.body.reminder.nextDate);
+  oldDate = new Date(req.body.reminder.nextDate);
+  newDate = Date.UTC(
+    oldDate.getUTCFullYear(),
+    oldDate.getUTCMonth(),
+    oldDate.getUTCDate(),
+    oldDate.getUTCHours(),
+    oldDate.getUTCMinutes()
+  );
+  req.body.reminder.nextDate = new Date(newDate);
+  console.log(new Date(newDate));
   let oldEvery = req.body.reminder.every;
   req.body.reminder.every = req.body.reminder.every
     .replace("1", req.body.reminder.everyPeriod)
