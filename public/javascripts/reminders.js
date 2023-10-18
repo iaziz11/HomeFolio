@@ -1,4 +1,34 @@
 jQuery(function () {
+  function getFormattedDate(oldDate) {
+    const convertDate = new Date(oldDate);
+    const formatter = Intl.DateTimeFormat("en-US", {
+      timeZone: "Etc/UTC",
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: false,
+    });
+    let returnDate = formatter.format(convertDate);
+    let [date, time] = returnDate.split(", ");
+    const [month, day, year] = date.split("/");
+    const [hour, minute] = time.split(":");
+    const newMonth = month < 10 ? `0${month}` : month;
+    const newDay = day < 10 ? `0${day}` : day;
+    const newHour = hour % 24 < 10 ? `0${hour % 24}` : hour % 24;
+    let newDateString = `${year}-${newMonth}-${newDay}T${newHour}:${minute}`;
+    return newDateString;
+  }
+  function getFormData(object) {
+    let formData = "";
+    Object.keys(object).forEach(
+      (key) => (formData += `${key}=${object[key]}&`)
+    );
+    console.log(formData);
+    return formData.slice(0, -1);
+  }
+
   $("#modalNewForm #newCheck").on("change", function () {
     if ($("#modalNewForm #newCheck").is(":checked")) {
       $("#newRemindText").text("Remind Me Starting:");
@@ -30,10 +60,19 @@ jQuery(function () {
     }
     $("#newReminderText").css("display", "none");
     $("#newSpinner").css("display", "block");
+    // sendData = $("#modalNewForm").serialize();
+
+    var formEl = document.forms.modalNewForm;
+    var formData = new FormData(formEl);
+    let allEntries = Object.fromEntries(formData);
+    allEntries["reminder[nextDate]"] = getFormattedDate(
+      allEntries["reminder[nextDate]"]
+    );
+    const newData = getFormData(allEntries);
     $.ajax({
       url: "/folios/" + this.id + "/reminders",
       method: "POST",
-      data: $("#modalNewForm").serialize(),
+      data: newData,
     })
       .always(function () {
         $("#newReminderText").css("display", "inline");
@@ -41,7 +80,7 @@ jQuery(function () {
       })
       .done(function () {
         console.log("Added successfully!");
-        window.location.reload();
+        // window.location.reload();
       })
       .fail(function (xhr, status, errorThrown) {
         alert("Sorry, there was a problem!");

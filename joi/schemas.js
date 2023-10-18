@@ -40,6 +40,7 @@ module.exports.reminderSchema = Joi.object({
     every: Joi.string().escapeHTML(),
     everyPeriod: Joi.string(),
   }).required(),
+  timezone: Joi.string().escapeHTML(),
 });
 
 module.exports.fileSchema = Joi.object({
