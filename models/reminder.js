@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const ReminderSchema = new Schema({
   text: String,
-  nextDate: Date,
+  nextDate: String,
   recurring: Boolean,
   every: [Number],
   everyPeriod: String,

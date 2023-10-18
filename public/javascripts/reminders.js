@@ -80,7 +80,7 @@ jQuery(function () {
       })
       .done(function () {
         console.log("Added successfully!");
-        // window.location.reload();
+        window.location.reload();
       })
       .fail(function (xhr, status, errorThrown) {
         alert("Sorry, there was a problem!");

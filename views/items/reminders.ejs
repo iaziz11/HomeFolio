@@ -36,8 +36,9 @@ minutes; timeValue += hours >= 12 ? " P.M." : " A.M."; return timeValue; } %>
               <%= r.recurring ? `Every ${r.everyPeriod}` : "No" %>
             </td>
             <td class="align-middle">
-              <% let newDate = new Date(`${r.nextDate} UTC`) %> <%=
-              (newDate.getMonth() + 1) + "/" + newDate.getDate() + "/" +
+              <% let temp = new Date(r.nextDate) %> <%let newDate = new
+              Date(temp.toString().split(" ").slice(0, 5).join(" ") + " UTC") %>
+              <%= (newDate.getMonth() + 1) + "/" + newDate.getDate() + "/" +
               newDate.getFullYear() + " @ " +
               militaryToStandardTime(`${newDate.getHours()}:${newDate.getMinutes()}`)%>
             </td>

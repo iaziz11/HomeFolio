@@ -52,7 +52,7 @@ module.exports.addReminder = async (req, res) => {
     oldEvery,
     req.body.reminder.everyPeriod
   );
-  req.body.reminder.nextDate = new Date(req.body.reminder.nextDate);
+  console.log(req.body.reminder.nextDate);
   const newReminder = new Reminder(req.body.reminder);
   if (req.body.reminder.recurring !== undefined) {
     newReminder.recurring = true;
