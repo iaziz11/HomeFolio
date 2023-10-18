@@ -40,7 +40,8 @@ minutes; timeValue += hours >= 12 ? " P.M." : " A.M."; return timeValue; } %>
               Date(temp.toString().split(" ").slice(0, 5).join(" ") + " UTC") %>
               <%= (newDate.getMonth() + 1) + "/" + newDate.getDate() + "/" +
               newDate.getFullYear() + " @ " +
-              militaryToStandardTime(`${newDate.getHours()}:${newDate.getMinutes()}`)%>
+              militaryToStandardTime(`${newDate.getHours()}:${newDate.getMinutes()}`)
+              + newDate.getTimezoneOffset()%>
             </td>
             <td class="align-middle text-center">
               <% if (!r.recurring) {%> <input class="form-check-input"
