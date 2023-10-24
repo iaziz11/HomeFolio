@@ -20,6 +20,12 @@ jQuery(function () {
     let newDateString = `${year}-${newMonth}-${newDay}T${newHour}:${minute}`;
     return newDateString;
   }
+
+  $(".date-container").each(function () {
+    let curDate = militaryToStandardTime($(this).data("date"));
+    $(this).html(curDate);
+  });
+
   function getFormData(object) {
     let formData = "";
     Object.keys(object).forEach(

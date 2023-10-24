@@ -24,25 +24,22 @@ module.exports.hasPermission = async (req, res, next) => {
   next();
 };
 
-module.exports.militaryToStandardTime = (time) => {
-  time = time.split(":");
-
-  let hours = Number(time[0]);
-  let minutes = Number(time[1]);
-
+module.exports.militaryToStandardTime = (date) => {
+  let temp = new Date(date + "Z");
+  let ret = `${temp.getMonth() + 1}/${temp.getDate()}/${temp.getFullYear()}@`;
+  let hours = temp.getHours();
+  let minutes = temp.getMinutes();
   let timeValue;
-
   if (hours > 0 && hours <= 12) {
-    timeValue = "" + hours;
+    timeValue = `${hours}`;
   } else if (hours > 12) {
-    timeValue = "" + (hours - 12);
+    timeValue = `${hours - 12}`;
   } else if (hours == 0) {
     timeValue = "12";
   }
-
   timeValue += minutes < 10 ? ":0" + minutes : ":" + minutes;
   timeValue += hours >= 12 ? " P.M." : " A.M.";
-  return timeValue;
+  return ret + timeValue;
 };
 
 module.exports.sendEmail = async (to, subject, body) => {

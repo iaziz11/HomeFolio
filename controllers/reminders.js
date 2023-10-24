@@ -31,6 +31,7 @@ module.exports.getReminders = async (req, res, next) => {
   res.render("items/reminders", {
     reminders,
     currentItem: currentItem.name,
+    myFunc: militaryToStandardTime,
   });
 };
 
