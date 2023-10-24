@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const ExpenseSchema = new Schema({
   name: String,
-  date: Date,
+  date: String,
   value: Number,
   file: {
     type: Schema.Types.ObjectId,

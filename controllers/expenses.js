@@ -1,5 +1,6 @@
 const Expense = require("../models/expense");
 const Item = require("../models/item");
+const { militaryToStandardTime } = require("../utils");
 
 module.exports.getExpenses = async (req, res) => {
   const { itemId } = req.params;
@@ -14,6 +15,7 @@ module.exports.getExpenses = async (req, res) => {
     expenses,
     total,
     currentItem: currentItem.name,
+    myFunc: militaryToStandardTime,
   });
 };
 
@@ -73,7 +75,7 @@ module.exports.getExpense = async (req, res) => {
 
 module.exports.addExpense = async (req, res) => {
   const { itemId } = req.params;
-  req.body.expense.date = new Date(req.body.expense.date);
+  console.log(req.body.expense.date);
   req.body.expense.value = Math.round(req.body.expense.value * 100);
   const expense = new Expense(req.body.expense);
   const currentItem = await Item.findById(itemId);
@@ -87,9 +89,8 @@ module.exports.addExpense = async (req, res) => {
 
 module.exports.editExpense = async (req, res) => {
   const { id } = req.params;
-  const newExpense = req.body.expense;
   req.body.expense.value = Math.round(req.body.expense.value * 100);
-  const expense = await Expense.findByIdAndUpdate(id, newExpense, {
+  const expense = await Expense.findByIdAndUpdate(id, req.body.expense, {
     new: true,
     runValidators: true,
   });

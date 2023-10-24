@@ -131,7 +131,7 @@ jQuery(function () {
       method: "GET",
     })
       .done(function (data) {
-        let newDate = new Date(data.nextDate);
+        let newDate = new Date(data.nextDate + "Z");
         let editDate =
           newDate.getFullYear() +
           "-" +
@@ -193,10 +193,17 @@ jQuery(function () {
     $("#editSpinner").css("display", "block");
     let itemId = $(this).attr("data-itemid");
     let id = $(this).attr("data-id");
+    var formEl = document.forms.modalEditForm;
+    var formData = new FormData(formEl);
+    let allEntries = Object.fromEntries(formData);
+    allEntries["reminder[nextDate]"] = getFormattedDate(
+      allEntries["reminder[nextDate]"]
+    );
+    const newData = getFormData(allEntries);
     $.ajax({
       url: "/folios/" + itemId + "/reminders/" + id,
       method: "PUT",
-      data: $("#modalEditForm").serialize(),
+      data: newData,
     })
       .always(function () {
         $("#editReminderText").css("display", "inline");

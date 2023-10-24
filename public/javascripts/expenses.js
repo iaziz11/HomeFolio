@@ -1,20 +1,38 @@
 jQuery(function () {
-  const militaryToStandardTime = (time) => {
-    time = time.split(":");
-    let hours = Number(time[0]);
-    let minutes = Number(time[1]);
-    let timeValue;
-    if (hours > 0 && hours <= 12) {
-      timeValue = "" + hours;
-    } else if (hours > 12) {
-      timeValue = "" + (hours - 12);
-    } else if (hours == 0) {
-      timeValue = "12";
-    }
-    timeValue += minutes < 10 ? ":0" + minutes : ":" + minutes;
-    timeValue += hours >= 12 ? " P.M." : " A.M.";
-    return timeValue;
-  };
+  function getFormData(object) {
+    let formData = "";
+    Object.keys(object).forEach(
+      (key) => (formData += `${key}=${object[key]}&`)
+    );
+    console.log(formData);
+    return formData.slice(0, -1);
+  }
+
+  function getFormattedDate(oldDate) {
+    const convertDate = new Date(oldDate);
+    const formatter = Intl.DateTimeFormat("en-US", {
+      timeZone: "Etc/UTC",
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: false,
+    });
+    let returnDate = formatter.format(convertDate);
+    let [date, time] = returnDate.split(", ");
+    const [month, day, year] = date.split("/");
+    const [hour, minute] = time.split(":");
+    const newMonth = month < 10 ? `0${month}` : month;
+    const newDay = day < 10 ? `0${day}` : day;
+    const newHour = hour % 24 < 10 ? `0${hour % 24}` : hour % 24;
+    let newDateString = `${year}-${newMonth}-${newDay}T${newHour}:${minute}`;
+    return newDateString;
+  }
+  $(".date-container").each(function () {
+    let curDate = militaryToStandardTime($(this).data("date"));
+    $(this).html(curDate);
+  });
 
   $(".submit-new-form").on("click", function () {
     $("#modalNewForm").addClass("was-validated");
@@ -23,10 +41,15 @@ jQuery(function () {
     }
     $("#newExpenseText").css("display", "none");
     $("#newSpinner").css("display", "block");
+    var formEl = document.forms.modalNewForm;
+    var formData = new FormData(formEl);
+    let allEntries = Object.fromEntries(formData);
+    allEntries["expense[date]"] = getFormattedDate(allEntries["expense[date]"]);
+    const newData = getFormData(allEntries);
     $.ajax({
       url: "/folios/" + this.id + "/expenses",
       method: "POST",
-      data: $("#modalNewForm").serialize(),
+      data: newData,
     })
       .always(function () {
         $("#newExpenseText").css("display", "inline");
@@ -56,7 +79,8 @@ jQuery(function () {
       method: "GET",
     })
       .done(function (data) {
-        let newDate = new Date(data.date);
+        console.log(data);
+        let newDate = new Date(data.date + "Z");
         let editDate =
           newDate.getFullYear() +
           "-" +
@@ -102,10 +126,15 @@ jQuery(function () {
     $("#editSpinner").css("display", "block");
     let itemId = $(this).attr("data-itemid");
     let id = $(this).attr("data-id");
+    var formEl = document.forms.modalEditForm;
+    var formData = new FormData(formEl);
+    let allEntries = Object.fromEntries(formData);
+    allEntries["expense[date]"] = getFormattedDate(allEntries["expense[date]"]);
+    const newData = getFormData(allEntries);
     $.ajax({
       url: "/folios/" + itemId + "/expenses/" + id,
       method: "PUT",
-      data: $("#modalEditForm").serialize(),
+      data: newData,
     })
       .always(function () {
         $("#editExpenseText").css("display", "inline");
