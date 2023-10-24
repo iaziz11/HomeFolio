@@ -29,10 +29,15 @@ jQuery(function () {
     let newDateString = `${year}-${newMonth}-${newDay}T${newHour}:${minute}`;
     return newDateString;
   }
-  $(".date-container").each(function () {
-    let curDate = militaryToStandardTime($(this).data("date"));
-    $(this).html(curDate);
-  });
+
+  function showCorrectTimezone() {
+    $(".date-container").each(function () {
+      console.log($(this).data("date"));
+      let curDate = militaryToStandardTime($(this).data("date"));
+      $(this).html(curDate);
+    });
+  }
+  showCorrectTimezone();
 
   $(".submit-new-form").on("click", function () {
     $("#modalNewForm").addClass("was-validated");
@@ -195,9 +200,9 @@ jQuery(function () {
         $("#dateRange").val(),
       type: "GET",
     })
-      .done(function ({ expenses, total }) {
-        console.log(expenses);
-        if (!expenses.length) {
+      .done(function ({ sendExpenses, total }) {
+        console.log(sendExpenses);
+        if (!sendExpenses.length) {
           $("#expenseTable").html(
             "<thead><tr><th class='text-center'>No expenses to display</th></tr></thead>"
           );
@@ -212,24 +217,13 @@ jQuery(function () {
                     <th></th>
                   </tr>
                 </thead>
-            ${expenses.map((e) => {
-              let newDate = new Date(e.date);
+            ${sendExpenses.map((e) => {
               return `
                 <tr class="tr-hover">
                     <td class="align-middle">${e.name}</td>
-                    <td class="align-middle">
-                      ${
-                        newDate.getMonth() +
-                        1 +
-                        "/" +
-                        newDate.getDate() +
-                        "/" +
-                        newDate.getFullYear() +
-                        " @ " +
-                        militaryToStandardTime(
-                          `${newDate.getHours()}:${newDate.getMinutes()}`
-                        )
-                      }
+                    <td class="align-middle date-container" data-date="${
+                      e.date
+                    }">
                     </td>
                     <td class="align-middle">
                       ${
@@ -270,6 +264,7 @@ jQuery(function () {
               </tr>
             </tfoot>`
           );
+          showCorrectTimezone();
         }
       })
       .fail(function (xhr, status, errorThrown) {

@@ -23,7 +23,10 @@ module.exports.updateExpenseRange = async (req, res) => {
   const { itemId } = req.params;
   res.locals.itemId = itemId;
   const currentItem = await Item.findById(itemId);
-  let expenses = [];
+  let expenses = await Expense.find({
+    _id: { $in: currentItem.expenses },
+  }).populate("file");
+  let sendExpenses = [];
   let timeRange = "all";
   let curDate;
   let compareDate;
@@ -32,39 +35,31 @@ module.exports.updateExpenseRange = async (req, res) => {
   }
   switch (timeRange) {
     case "all":
-      expenses = await Expense.find({
-        _id: { $in: currentItem.expenses },
-      }).populate("file");
+      compareDate = new Date(0);
       break;
     case "year":
       curDate = new Date();
       compareDate = new Date(`1/1/${curDate.getFullYear()}`);
-      expenses = await Expense.find({
-        _id: { $in: currentItem.expenses },
-        date: { $gte: compareDate },
-      }).populate("file");
       break;
     case "month":
       curDate = new Date();
       compareDate = new Date(
         `${curDate.getMonth() + 1}/1/${curDate.getFullYear()}`
       );
-      expenses = await Expense.find({
-        _id: { $in: currentItem.expenses },
-        date: { $gte: compareDate },
-      }).populate("file");
       break;
     case "week":
       curDate = new Date();
       compareDate = new Date(curDate.getTime() - 1000 * 60 * 60 * 24 * 7);
-      expenses = await Expense.find({
-        _id: { $in: currentItem.expenses },
-        date: { $gte: compareDate },
-      }).populate("file");
       break;
   }
+  for (let i of expenses) {
+    let newDate = new Date(i.date + "Z");
+    if (newDate.getTime() > compareDate.getTime()) {
+      sendExpenses.push(i);
+    }
+  }
   let total = expenses.reduce((r, e) => r + e.value, 0);
-  res.send({ expenses, total });
+  res.send({ sendExpenses, total });
 };
 
 module.exports.getExpense = async (req, res) => {
