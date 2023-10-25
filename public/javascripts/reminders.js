@@ -66,7 +66,6 @@ jQuery(function () {
     }
     $("#newReminderText").css("display", "none");
     $("#newSpinner").css("display", "block");
-    // sendData = $("#modalNewForm").serialize();
 
     var formEl = document.forms.modalNewForm;
     var formData = new FormData(formEl);

@@ -12,7 +12,7 @@ jQuery(function () {
             <table class="table">
               <thead>
                 <tr>
-                  <th class="text-center">No expenses to display</th>
+                  <th class="text-center">No expenses for this time range</th>
                 </tr>
               </thead>
             </table>

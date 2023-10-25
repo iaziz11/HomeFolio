@@ -43,7 +43,6 @@ module.exports.getReminder = async (req, res) => {
 
 module.exports.addReminder = async (req, res) => {
   const { itemId } = req.params;
-  console.log(req.body);
   let oldEvery = req.body.reminder.every;
   req.body.reminder.every = req.body.reminder.every
     .replace("1", req.body.reminder.everyPeriod)
@@ -53,7 +52,6 @@ module.exports.addReminder = async (req, res) => {
     oldEvery,
     req.body.reminder.everyPeriod
   );
-  console.log(req.body.reminder.nextDate);
   const newReminder = new Reminder(req.body.reminder);
   if (req.body.reminder.recurring !== undefined) {
     newReminder.recurring = true;

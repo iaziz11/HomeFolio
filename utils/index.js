@@ -61,3 +61,25 @@ module.exports.sendEmail = async (to, subject, body) => {
   });
   console.log("Message sent: %s", info.messageId);
 };
+
+module.exports.getFormattedDate = function (oldDate) {
+  const convertDate = new Date(oldDate);
+  const formatter = Intl.DateTimeFormat("en-US", {
+    timeZone: "Etc/UTC",
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  });
+  let returnDate = formatter.format(convertDate);
+  let [date, time] = returnDate.split(", ");
+  const [month, day, year] = date.split("/");
+  const [hour, minute] = time.split(":");
+  const newMonth = month < 10 ? `0${month}` : month;
+  const newDay = day < 10 ? `0${day}` : day;
+  const newHour = hour % 24 < 10 ? `0${hour % 24}` : hour % 24;
+  let newDateString = `${year}-${newMonth}-${newDay}T${newHour}:${minute}`;
+  return newDateString;
+};

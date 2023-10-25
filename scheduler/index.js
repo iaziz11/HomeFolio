@@ -3,7 +3,7 @@ const Reminder = require("../models/reminder");
 const ResetRequest = require("../models/passwordResetRequest");
 const mongoConnectionString = process.env.DB_URL;
 const agenda = new Agenda({ db: { address: mongoConnectionString } });
-const { sendEmail } = require("../utils");
+const { sendEmail, getFormattedDate } = require("../utils");
 
 // [year, month, week, day, hour, minute]
 // will be multiplied by reminder.every, then reduced to get sum
@@ -30,7 +30,6 @@ agenda.define("check expired reset requests", async (job) => {
 agenda.define("check reminders", async (job) => {
   const recurringReminders = await Reminder.find({
     recurring: true,
-    nextDate: { $lte: new Date() },
   })
     .populate("user")
     .populate("item");
@@ -38,49 +37,53 @@ agenda.define("check reminders", async (job) => {
     recurring: false,
     sent: false,
     completed: false,
-    nextDate: { $lte: new Date() },
   })
     .populate("user")
     .populate("item");
   for (let rr of recurringReminders) {
-    if (rr.every[1] > 0) {
-      let addMonths = new Date(rr.nextDate).getMonth() + rr.every[1];
-      let newMonth = addMonths % 12;
-      let addYears = Math.floor(addMonths / 12);
-      rr.nextDate = new Date(rr.nextDate).setFullYear(
-        new Date(rr.nextDate).getFullYear() + addYears,
-        newMonth
-      );
-    } else if (rr.every[0] > 0) {
-      rr.nextDate = new Date(rr.nextDate).setFullYear(
-        rr.nextDate.getFullYear() + rr.every[0]
-      );
-    } else {
-      rr.nextDate = new Date(
-        new Date(rr.nextDate).getTime() +
-          rr.every.reduce(function (r, a, i) {
-            return r + a * timeArray[i];
-          }, 0)
-      ).toISOString();
-    }
-    await rr.save();
-    await sendEmail(
-      rr.user.username,
-      `Your reminder to ${rr.text}`,
-      `<h1>Hello ${rr.user.firstName}</h1>
+    let compareDate = new Date(rr.nextDate + "Z");
+    if (compareDate.getTime() <= Date.now()) {
+      if (rr.every[1] > 0) {
+        let addMonths = compareDate.getMonth() + rr.every[1];
+        let newMonth = addMonths % 12;
+        let addYears = Math.floor(addMonths / 12);
+        compareDate.setFullYear(compareDate.getFullYear() + addYears, newMonth);
+        rr.nextDate = getFormattedDate(compareDate.toISOString());
+      } else if (rr.every[0] > 0) {
+        compareDate.setFullYear(compareDate.getFullYear() + rr.every[0]);
+        rr.nextDate = getFormattedDate(compareDate.toISOString());
+      } else {
+        rr.nextDate = getFormattedDate(
+          new Date(
+            compareDate.getTime() +
+              rr.every.reduce(function (r, a, i) {
+                return r + a * timeArray[i];
+              }, 0)
+          ).toISOString()
+        );
+      }
+      await rr.save();
+      await sendEmail(
+        rr.user.username,
+        `Your reminder to ${rr.text}`,
+        `<h1>Hello ${rr.user.firstName}</h1>
     <p>This is your recurring reminder to ${rr.text} for your ${rr.item.name}</p>
     <p>Your next reminder will be on ${rr.nextDate}</p>`
-    );
+      );
+    }
   }
   for (let sr of singleReminder) {
-    sr.sent = true;
-    await sendEmail(
-      sr.user.username,
-      `Your reminder to ${sr.text}`,
-      `<h1>Hello ${sr.user.firstName}</h1>
+    let compareDate = new Date(sr.nextDate + "Z");
+    if (compareDate.getTime() <= Date.now()) {
+      sr.sent = true;
+      await sendEmail(
+        sr.user.username,
+        `Your reminder to ${sr.text}`,
+        `<h1>Hello ${sr.user.firstName}</h1>
       <p>This is your reminder to ${sr.text} for your ${sr.item.name}</p>`
-    );
-    await sr.save();
+      );
+      await sr.save();
+    }
   }
 });
 
@@ -88,7 +91,7 @@ agenda.define("check reminders", async (job) => {
 // every 10 minutes: 0 */10 * ? * *
 
 (async function () {
-  console.log("starting agenda");
+  console.log("Starting Agenda");
   await agenda.start();
   await agenda.every("0 * * ? * *", [
     "check reminders",
