@@ -35,7 +35,7 @@ npm run start
 
 HomeFolio is intentionally built as a **server-rendered application**. The UI is delivered as HTML generated on the backend, and all core workflows (folios, reminders, uploads, expense logging, and receipt processing) are handled server-side.
 
-Receipt capture works by taking an uploaded receipt image and extracting structured details (such as vendor, date, and total) to automatically create an expense entry. Because receipts vary widely, extracted results may require a quick review or correction.
+Receipt capture works by taking an uploaded receipt image and extracting structured details (such as vendor, date, and total) using the Mindee API to automatically create an expense entry.
 
 ## Usage overview
 
@@ -46,19 +46,9 @@ A typical workflow looks like this:
 3. Upload related documents (warranty PDFs, manuals, service records).
 4. Create reminders for recurring or scheduled tasks (filter changes, inspections, renewals).
 5. Add expenses manually or upload receipt photos to generate expenses automatically.
-6. Review an asset’s full history at any time (documents, reminders, and cost of ownership).
-
-## Data and privacy notes
-
-Receipts and uploaded files can contain sensitive personal information. If you deploy HomeFolio yourself:
-
-- Treat stored files and backups accordingly
-- Avoid committing secrets, credentials, or private data to the repository
-- Follow best practices for securing uploaded documents
 
 ## Roadmap ideas
 
 - Export expenses (CSV)
-- More robust receipt parsing with line-item support
 - Recurring reminders and notification preferences
-- Sharing or multi-user collaboration per folio
+- Sharing or multi-user collaboration per folio (for families or households)
